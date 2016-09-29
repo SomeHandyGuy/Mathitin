@@ -1,0 +1,3834 @@
+<?xml version="1.0"?>
+
+<root>
+    <question>
+        <category>Numbers</category>
+        <subcategory>Basics</subcategory>
+        <title>Directed Numbers</title>
+        <suitable>            
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code>
+<![CDATA[
+var qNum={
+ a	:	nonZeroRand(-10,10),
+ b	:	nonZeroRand(-10,10),
+ c	:	nonZeroRand(-10,10),
+ pm1	:	randomInt(0,1),
+ pm2	:	randomInt(0,1),
+ "$"	:	"`"	
+ };
+ if(qNum['pm1'])
+ {
+ qNum['pm1']='+';
+ qNum['pb']=qNum['b'];
+ }
+ else
+ {
+ qNum['pm1']='-';
+ qNum['pb']=-qNum['b'];
+ }
+ if(qNum['pm2'])
+ {
+ qNum['pm2']='+';
+ qNum['pc']=qNum['c'];
+ }
+ else
+ {
+ qNum['pm2']='-';
+ qNum['pc']=-qNum['c'];
+ }
+ qNum['apb']=qNum['a']+qNum['pb'];
+ qNum['apbpc']=qNum['a']+qNum['pb']+qNum['pc'];
+ qNum['question']='<p>Evaluate the following expression:</p><p> [$][a][pm1] [+b][pm2] [+c]=[$]</p><p> Show ALL working.</p>';
+ qNum['answer']='<p>[$][pm1] [+b]=[pb][$]</p><p>[$][pm2] [+c]=[pc][$]</p><p>So the expression becomes:</p><p>[$][a][+pb][+pc][$]</p><p>Then</p><p>[$][a][+pb]=[apb][$]</p><p>and so</p><p>[$][apb][+pc]=[apbpc][$]</p>';
+]]>
+        </code>
+    </question>
+    <question>
+        <category>Numbers</category>
+        <subcategory>Basics</subcategory>
+        <title>Order of Operations</title>
+        <suitable>            
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+	  var qNum={
+		a	:	new Fraction(nonZeroRand(-10,10),1),
+		b	:	new Fraction(nonZeroRand(-10,10),1),
+		c	:	new Fraction(nonZeroRand(-10,10),1),
+		d	:	new Fraction(nonZeroRand(-10,10),1),
+		sym1	:	   randomOp(),
+		sym2	:	   randomOp(),
+		sym3	:	   randomOp(),
+		quest   :	Math.floor(Math.random()*6),
+		bo1	 :	   '',
+		bo2	 :	   '',
+		bc1	 :	   '',
+		bc2	 :	   '',
+		"$"	:	"`"	
+	  };
+	  var nobrackets=true;
+	  
+	  function isMult(test){
+	  if(test=='xx' || test=='-:')
+		  return true;
+	  else
+		  return false;
+	  }
+	  
+	  function doMathOp(sym,a,b)
+	  {
+		switch(sym)
+		{
+		  case 'xx':
+			  return a.mult(b);
+		  case '-:':
+			  return a.div(b);
+		  case '+':
+			  return a.add(b);
+		  case '-':
+			  return a.sub(b);
+		}
+	  }
+	  
+	  var doFirst=0;
+	  switch(qNum['quest'])
+	  {
+		case 0:
+			qNum['quest']=process('[a][sym1] [b][sym2] [c][sym3] [d]',qNum);
+			if(isMult(qNum['sym1']) || (!isMult(qNum['sym1'])&&!isMult(qNum['sym2'])&&!isMult(qNum['sym3'])))
+			  doFirst=1;
+			else if(isMult(qNum['sym2']))
+			  doFirst=2;
+			else
+			  doFirst=3				
+			break;
+		case 1:
+			qNum['quest']=process('([a][sym1] [b])[sym2]([c][sym3] [d])',qNum);
+			doFirst=1;
+			nobrackets=false;
+			qNum['bo2']='(';
+			qNum['bc2']=')';
+			break;
+		case 2:
+			qNum['quest']=process('([a][sym1] [b])[sym2] [c][sym3] [d]',qNum);
+			doFirst=1;
+			break;
+		case 3:
+			qNum['quest']=process('[a][sym1] [b][sym2]([c][sym3] [d])',qNum);
+			doFirst=3;
+			break;
+		case 4:
+			qNum['quest']=process('([a][sym1] [b][sym2] [c])[sym3] [d]',qNum);
+			nobrackets=false;
+			qNum['bo1']='(';
+			qNum['bc1']=')';
+			if(isMult(qNum['sym1']) || (!isMult(qNum['sym1'])&&!isMult(qNum['sym2'])))
+			  doFirst=1;
+			else
+			  doFirst=2;
+			break;
+		case 5:
+			qNum['quest']=process('[a][sym1]([b][sym2] [c][sym3] [d])',qNum);
+			nobrackets=false;
+			qNum['bo2']='(';
+			qNum['bc2']=')';
+			if(isMult(qNum['sym2']) || (!isMult(qNum['sym2'])&&!isMult(qNum['sym3'])))
+			  doFirst=2;
+			else
+			  doFirst=3;
+			break;
+		default:
+			qNum['quest']='oops!';
+	  }
+	  
+	switch(doFirst)
+	{
+		case 1:
+				qNum['sym4']=qNum['sym1'];
+				qNum['e']=qNum['a'];
+				qNum['f']=qNum['b'];
+				qNum['h']=qNum['g']=doMathOp(qNum['sym1'],qNum['a'],qNum['b']);
+				qNum['i']=qNum['c'];
+				qNum['j']=qNum['d'];
+				qNum['sym5']=qNum['sym2'];
+				qNum['sym6']=qNum['sym3'];
+				break;
+		case 2:
+				qNum['sym4']=qNum['sym2'];
+				qNum['e']=qNum['b'];
+				qNum['f']=qNum['c'];
+				qNum['i']=qNum['g']=doMathOp(qNum['sym2'],qNum['b'],qNum['c']);				
+				qNum['h']=qNum['a'];
+				qNum['j']=qNum['d'];
+				qNum['sym5']=qNum['sym1'];
+				qNum['sym6']=qNum['sym3'];
+				break;
+		case 3:
+				qNum['sym4']=qNum['sym3'];
+				qNum['e']=qNum['c'];
+				qNum['f']=qNum['d'];
+				qNum['j']=qNum['g']=doMathOp(qNum['sym3'],qNum['c'],qNum['d']);
+				qNum['h']=qNum['a'];
+				qNum['i']=qNum['b'];
+				qNum['sym5']=qNum['sym1'];
+				qNum['sym6']=qNum['sym2'];
+				break;
+		default:
+			qNum['quest']='oops!';
+	  }
+	  
+	  if(qNum['bo2'] || (nobrackets && isMult(qNum['sym6']) && !isMult(qNum['sym5'])))
+	  {
+		  qNum['k']=qNum['i'];
+		  qNum['l']=qNum['j'];
+		  qNum['sym7']=qNum['sym6'];
+		  qNum['o']=qNum['m']=doMathOp(qNum['sym6'],qNum['i'],qNum['j']);		  
+		  qNum['n']=qNum['h'];
+		  qNum['sym8']=qNum['sym5'];
+	  }
+	  else
+	  {
+		  qNum['k']=qNum['h'];
+		  qNum['l']=qNum['i'];
+		  qNum['sym7']=qNum['sym5'];
+		  qNum['n']=qNum['m']=doMathOp(qNum['sym5'],qNum['h'],qNum['i']);		  
+		  qNum['o']=qNum['j'];
+		  qNum['sym8']=qNum['sym6'];
+	  }
+	  if(qNum['sym8']=='xx')
+		  qNum['p']=qNum['n'].mult(qNum['o']);
+	  else if(qNum['sym8']=='-:')
+		  qNum['p']=qNum['n'].div(qNum['o']);
+	  else if(qNum['sym8']=='+')
+		  qNum['p']=qNum['n'].add(qNum['o']);
+	  else
+		  qNum['p']=qNum['n'].sub(qNum['o']);
+	  if(qNum['p'].string() != qNum['p'].improperString())
+		  qNum['p']=qNum['p'].string()+'='+qNum['p'].improperString();
+	  else
+		  qNum['p']=qNum['p'].string();
+        qNum['question']='<p>Evaluate the following expression:</p><p>[$][quest]=[$]</p><p> Show ALL working.</p>';
+        qNum['answer']='<p>First do [$][e][sym4] [f]=[g][$]</p><p>Then we have [$][bo1][h][sym5] [bo2][i][bc1][sym6] [j][bc2][$]</p><p>Next do [$][k][sym7] [l]=[m][$]</p><p>and we have [$][n][sym8] [o]=[p][$]</p>';
+        ]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Numbers</category>
+        <subcategory>Indices</subcategory>  
+        <title>Multiplication, Division and Powers</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+          <![CDATA[
+                var qNum={
+                                b1	:	Math.floor(Math.random()*11)+2,
+                                i1	:	Math.floor(Math.random()*21)-5,
+                i2	:	Math.floor(Math.random()*21)-5,
+                i3      :       Math.floor(Math.random()*21)-5,
+                sym    :       Math.floor(Math.random()*2),
+                qType   :       Math.floor(Math.random()*3),
+                bo      :       '(',
+                bc      :       ')',
+                '^1'    :       '^',
+                '^2'    :       '^',
+                'Explain2':     '',
+                                "$"	:	"`"	
+                };
+        var multiply=true;
+        qNum['b2']=qNum['b1'];
+        switch(qNum['sym']){
+            case 0:
+                qNum['sym']='xx';
+                qNum['i4']=qNum['i1']+qNum['i2'];
+                qNum['Explain1']='[$]'+qNum['i1']+'+ '+qNum['i2']+'='+qNum['i4']+'[$],<br/>';
+                break;
+            case 1:
+                qNum['sym']='-:';
+                multiply=false;
+                qNum['i4']=qNum['i1']-qNum['i2'];
+                qNum['Explain1']='[$] '+qNum['i1']+'-'+qNum['i2']+'='+qNum['i4']+' [$],<br/>';
+                break;
+            default:
+                qNum['sym']='oops!';
+        }
+        switch(qNum['qType']){
+            case 0:
+                qNum['i3']=qNum['^2']=qNum['bo']=qNum['bc']='';
+                qNum['Explain1']+=' so:';
+                break;
+            case 1:
+                qNum['sym']=qNum['i2']=qNum['^1']=qNum['b2']='';
+                qNum['i4']=qNum['i1']*qNum['i3'];
+                qNum['Explain1']='[$]'+qNum['i1']+'xx'+qNum['i3']+'='+qNum['i4']+'[$],<br/> so';
+                break;
+            case 2:
+                qNum['^2']='^';
+                qNum['bo']='(';
+                qNum['bc']=')';
+                qNum['Explain2']='[$]'+qNum['i4']+'xx'+qNum['i3']+'=';
+                qNum['Explain1']+=' and<br/>';
+                qNum['i4']*=qNum['i3'];
+                qNum['Explain2']+=qNum['i4']+'[$],<br/> so';
+                qNum['Explain2']=process(qNum['Explain2'],qNum);
+                break;
+            default:
+                alert('oops qType='+qNum['qType']);
+        }
+        if(qNum['i4']<0){
+            qNum['=']='=1/([b1]^'+Math.abs(qNum['i4'])+')';
+            if(Math.pow(qNum['b1'],Math.abs(qNum['i4']))<10000)
+                qNum['=']+='=1/'+Math.pow(qNum['b1'],Math.abs(qNum['i4']));
+        }
+        else{
+            qNum['=']=Math.pow(qNum['b1'],qNum['i4']);
+            if(qNum['=']>999999||qNum['=']<1)
+                qNum['=']='';
+            else
+                qNum['=']='='+qNum['='];
+        }
+        qNum['=']=process(qNum['='],qNum);
+        qNum['Explain1']=process(qNum['Explain1'],qNum);
+        qNum['question']='<p>Simplify the following expression as much as possible:</p><p> [$][bo][b1]^[i1][sym][b2][^1][i2][bc][^2][i3][$]</p><p> Show ALL working.</p>';
+        qNum['answer']='<p>[Explain1][Explain2]</p><p>[$]=[b1]^[i4][=][$]</p>';
+        ]]>
+        </code>
+    </question>
+
+    <question>
+        <category>Numbers</category>
+        <subcategory>Indices</subcategory>  
+        <title>Negative and Fractional Powers</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+          <![CDATA[
+                var qNum={
+                n	:	Math.floor(Math.random()*7)+2,
+                brn     :       Math.floor(Math.random()*5)+2,
+                First   :       'First find',
+                ifpow   :       '<p>Now find [$][brn]^[m][$]</p><p>[$][brn]^[m]=[brnpm][$]</p>',
+                rootn   :       'root [n]',
+                                minus	:	Math.floor(Math.random()*2),
+                ifneg   :       '',
+                                "$"	:	"`"	
+                };
+        do{
+            qNum['m']=Math.floor(Math.random()*1.5*qNum['n'])+1;
+        }while(qNum['m']==qNum['n']);
+        var g=gcd(qNum['m'],qNum['n']);
+        qNum['m']/=g;
+        qNum['n']/=g;
+        qNum['b']=Math.pow(qNum['brn'],qNum['n']);
+        qNum['brnpm']=Math.pow(qNum['brn'],qNum['m']);
+        if(qNum['n']==2)
+            qNum['rootn']='sqrt';
+        if(qNum['m']==1){
+            qNum['First']='Find';
+            qNum['ifpow']=qNum['dopow']='';
+        }
+        if(qNum['minus'])
+            qNum['minus']='';
+        else{
+            qNum['minus']='-';
+            qNum['ifneg']='Since the power is negative, the answer is: [$]1/('+qNum['brnpm']+')[$]';
+        }
+                qNum['question']='<p>Simplify the following expression as much as possible:</p><p> [$][b]^([minus][m]/[n])[$]</p><p> Show ALL working.</p>';
+        qNum['answer']='<p>[First] [$][?rootn]([b])[$]</p><p>[$][?rootn]([b])=[brn][$] <br/>(because [$][brn]^[n]=[b][$])</p>[?ifpow]<p>[?ifneg]</p>';
+                        ]]>
+        </code>
+    </question>
+
+    <question>
+        <category>Numbers</category>
+        <subcategory>Basics</subcategory>  
+        <title>Scientific Notation</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+    var number = randomLowInt(1, 99999999), exp = randomLowInt(1, 99)*nonZeroRand(-1,1), sci = randomInt(0, 1), sNumber, digit = 0, zeros = '';
+    while (number / Math.pow(10, digit) >= 10)
+        digit++;
+    sNumber='`'+number / Math.pow(10, digit)+'xx 10^'+exp+'`';
+    if (exp > 0) {
+        for (var i = 0; i < exp - digit; i++) {
+            if (i % 3 == (exp-digit)%3)
+                zeros += ' ';
+            zeros += '0';
+        }
+        if(zeros)
+            number += zeros;
+        else
+            number/=Math.pow(10,digit-exp);
+    }
+    else {
+        zeros = '0.';
+        for (var i = exp + 1; i < 0; i++) {            
+            if (i % 3 == (exp + 1)%3)
+                zeros += ' ';
+            zeros += '0';
+        }
+        number = zeros + number;
+    }
+    var qNum={
+        'asthis': sci ? 'in scientific notation' : 'as a normal number',
+        'number': sci ? number : sNumber,
+        'ans': sci ? sNumber : number,
+        "$": "`"
+    };
+        qNum['question']='<p>Write [number] [asthis]</p>';
+        qNum['answer']='<p>[ans]</p>';
+			]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Numbers</category>
+        <subcategory>Fractions</subcategory>  
+        <title>Fractions (proper)</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+            var qNum={
+                    a       :   nonZeroRand(-12,15),
+                    b       :   randomInt(2,20),
+                    c       :   nonZeroRand(-12,15),
+                    d       :   randomInt(2,20),
+                    sym     :   randomOp(),
+                    ifaddsub:   'First find a common denominator</p><p>[g] is the lowest common multiple of [b] and [d].</p><p>[$]([a]xx[ap])/([b]xx[ap]) [sym] ([c]xx[cp])/([d]xx[cp])= [ag]/[g] [sym] [cg]/[g]',
+                    ifmult  :   '',
+                    ifdiv   :   '',
+                    ifsimplify: '',
+                    "$"     :   "`"
+            };
+            if(qNum['c']<0 && (qNum['sym']==='+'||qNum['sym']==='-'))
+                qNum['c']*=-1;
+            var f1=new Fraction(qNum['a'],qNum['b']);
+            var f2=new Fraction(qNum['c'],qNum['d']);
+            qNum['a']=f1.numerator;
+            qNum['b']=f1.denominator;
+            qNum['c']=f2.numerator;
+            qNum['d']=f2.denominator;
+            qNum['ab']=f1.string();
+            qNum['cd']=f2.string();
+            qNum['g']=lcm(qNum['b'],qNum['d']);
+            qNum['ap']=qNum['g']/qNum['b'];
+            qNum['cp']=qNum['g']/qNum['d'];
+            qNum['ag']=qNum['a']*qNum['ap'];
+            qNum['cg']=qNum['c']*qNum['cp'];
+            switch(qNum['sym']){
+                case '+':
+                    f1=f1.add(f2);
+                    qNum['rawN']=qNum['ag']+qNum['cg'];
+                    qNum['rawD']=qNum['g'];
+                    if(qNum['b']===qNum['d'])
+                        qNum['ifaddsub']='The denominators are the same, so add their numerators.</p><p>[$][a]/[b] [sym] [c]/[d]';
+                    break;
+                case '-':
+                    f1=f1.sub(f2);
+                    qNum['rawN']=qNum['ag']-qNum['cg'];
+                    qNum['rawD']=qNum['g'];
+                    if(qNum['b']===qNum['d'])
+                        qNum['ifaddsub']='The denominators are the same, so subtract their numerators.</p><p>[$][a]/[b] [sym] [c]/[d]';
+                    break;
+                case 'xx':
+                    f1=f1.mult(f2);
+                    qNum['ifaddsub']='';
+                    qNum['ifmult']='Multiply the numerators then the denominators.</p><p>[$]([a]xx[c])/([b]xx[d])';
+                    qNum['rawN']=qNum['a']*qNum['c'];
+                    qNum['rawD']=qNum['b']*qNum['d'];
+                    break;
+                case '-:':
+                    f1=f1.div(f2);
+                    qNum['ifaddsub']='';
+                    qNum['ifdiv']='First, invert the second fraction,<br/> then multiply the numerators then the denominators.</p><p>[$][a]/[b]xx[d]/[c]=([a]xx[d])/([b]xx[c])';
+                    qNum['rawN']=qNum['a']*qNum['d'];
+                    qNum['rawD']=qNum['b']*qNum['c'];
+                    break;
+            }
+            if(f1.numerator!==qNum['rawN']){
+                var gd=gcd(Math.abs(qNum['rawN']),Math.abs(qNum['rawD']));
+                qNum['ifsimplify']='Then simplify:</p><p>[$]([rawN]-:'+gd+')/([rawD]-:'+gd+')='+f1.string()+'[$]';
+            }
+        qNum['question']='<p>Evaluate the following expression as a single fraction in its simplest form:</p><p> [$][ab] [sym] [cd][$]</p><p> Show ALL working.</p><p>Do not use a calculator<br/>(except for basic operations [$]+,-,xx,-:[$])</p>';
+        qNum['answer']='<p>[?ifaddsub][?ifmult][?ifdiv]=[rawN]/[rawD][$]</p><p>[?ifsimplify]</p>';
+			]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Numbers</category>
+        <subcategory>Fractions</subcategory>  
+        <title>Fractions (mixed)</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+            var qNum={
+                    a       :   nonZeroRand(1,50),
+                    b       :   randomInt(2,10),
+                    c       :   nonZeroRand(1,50),
+                    d       :   randomInt(2,10),
+                    sym     :   randomOp(),
+                    ifaddsub:   '[g] is the lowest common multiple of [b] and [d].</p><p>[$]([a]xx[ap])/([b]xx[ap]) [sym] ([c]xx[cp])/([d]xx[cp])= [ag]/[g] [sym] [cg]/[g]',
+                    ifcontext:  '<p>First convert any Mixed fractions to improper.</p><p>',
+                    ifcon1  :   '[$][ab]=[iab][$]',
+                    ifcon2  :   '[$][cd]=[icd][$]',
+                    ifmult  :   '',
+                    ifdiv   :   '',
+                    ifsimplify: '',
+                    iraw    :   '',
+                    "$"     :   "`"
+            };
+            var con1=true;
+            var con2=true;
+            if(qNum['c']<0 && (qNum['sym']==='+'||qNum['sym']==='-'))
+                qNum['c']*=-1;
+            var f1=new Fraction(qNum['a'],qNum['b']);
+            var f2=new Fraction(qNum['c'],qNum['d']);
+            qNum['a']=f1.numerator;
+            qNum['b']=f1.denominator;
+            qNum['c']=f2.numerator;
+            qNum['d']=f2.denominator;
+            if(f1.improper==false || f1.whole){
+                con1=false;
+                qNum['ifcon1']='';
+            }
+            if(f2.improper==false || f2.whole){
+                con2=false;
+                qNum['ifcon2']='';
+            }
+            if(con1==false&&con2==false)
+                qNum['ifcontext']='';
+            if(con1 && con2)
+                qNum['ifcon2']=' and '+qNum['ifcon2'];
+            qNum['ab']=f1.improperString();
+            qNum['cd']=f2.improperString();
+            qNum['iab']=f1.string();
+            qNum['icd']=f2.string();
+            qNum['g']=lcm(qNum['b'],qNum['d']);
+            qNum['ap']=qNum['g']/qNum['b'];
+            qNum['cp']=qNum['g']/qNum['d'];
+            qNum['ag']=qNum['a']*qNum['ap'];
+            qNum['cg']=qNum['c']*qNum['cp'];
+            switch(qNum['sym']){
+                case '+':
+                    f1=f1.add(f2);
+                    qNum['rawN']=qNum['ag']+qNum['cg'];
+                    qNum['rawD']=qNum['g'];
+                    if(qNum['b']===qNum['d'])
+                        qNum['ifaddsub']='The denominators are the same, so add their numerators.</p><p>[$][a]/[b] [sym] [c]/[d]';
+                    break;
+                case '-':
+                    f1=f1.sub(f2);
+                    qNum['rawN']=qNum['ag']-qNum['cg'];
+                    qNum['rawD']=qNum['g'];
+                    if(qNum['b']===qNum['d'])
+                        qNum['ifaddsub']='The denominators are the same, so subtract their numerators.</p><p>[$][a]/[b] [sym] [c]/[d]';
+                    break;
+                case 'xx':
+                    f1=f1.mult(f2);
+                    qNum['ifaddsub']='';
+                    qNum['ifmult']='Multiply the numerators then the denominators.</p><p>[$]([a]xx[c])/([b]xx[d])';
+                    qNum['rawN']=qNum['a']*qNum['c'];
+                    qNum['rawD']=qNum['b']*qNum['d'];
+                    break;
+                case '-:':
+                    f1=f1.div(f2);
+                    qNum['ifaddsub']='';
+                    qNum['ifdiv']='Invert and multiply.</p><p>[$][a]/[b]xx[d]/[c]=([a]xx[d])/([b]xx[c])';
+                    qNum['rawN']=qNum['a']*qNum['d'];
+                    qNum['rawD']=qNum['b']*qNum['c'];
+                    break;
+            }
+            if(f1.numerator!==qNum['rawN']){
+                var gd=gcd(Math.abs(qNum['rawN']),Math.abs(qNum['rawD']));
+                qNum['ifsimplify']='Then simplify: [$]([rawN]-:'+gd+')/([rawD]-:'+gd+')='+f1.string();
+                if(f1.improper)
+                    qNum['ifsimplify']+='='+f1.improperString()+'[$]';
+                else
+                    qNum['ifsimplify']+='[$]';
+            }
+            else if(f1.improper)
+                qNum['iraw']='='+f1.improperString();
+        qNum['question']='<p>Evaluate the following expression as a single fraction in its simplest form:</p><p> [$][ab] [sym] [cd][$]</p><p> Show ALL working.</p><p>Do not use a calculator<br/>(except for basic operations [$]+,-,xx,-:[$])</p>';
+        qNum['answer']='<p>[?ifaddsub][?ifmult][?ifdiv]=[rawN]/[rawD][?iraw][$]</p><p>[?ifsimplify]</p>';                
+			]]>
+        </code>
+    </question>
+
+    <question>
+        <category>Numbers</category>
+        <subcategory>Decimals</subcategory>  
+        <title>Rounding Off</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+            var start=randomInt(0,8);
+            var stop=randomInt(start+1,9);
+            var digits=[0,0,0,0,0,0,0,0,0,0];
+            var anDigits=[0,0,0,0,0,0,0,0,0,0];
+            var qNum={
+                    pre     :   randomInt(1,stop-start),
+                    type    :   randomInt(0,1),
+                    number  :   '',
+                    ans  :   '',
+                    "$"     :   "`"
+            };
+            var j=1;
+            if(qNum['type']){
+                j=start-4;
+                stop=randomInt(Math.max(start,6),9);
+                qNum['pre']=randomInt(Math.max(start-4,1),stop-5);
+            }
+            var stopper=start+qNum['pre'];
+            if(qNum['type'])
+                stopper=5+qNum['pre'];
+            for(var i=start; i<=stop; i++){
+                if(i===start)
+                    if(start===0)
+                        digits[i]=randomInt(1,8);
+                    else
+                        digits[i]=randomInt(1,9);
+                else
+                    digits[i]=randomInt(0,9);
+                anDigits[i]=digits[i];
+            }
+            if(digits[stopper]>4){
+                anDigits[stopper-1]+=1;
+                var n=stopper-1;
+                while(anDigits[n]===10){
+                    anDigits[n]=0;
+                    n-=1;
+                    anDigits[n]+=1;
+                }
+            }
+            for(var i=stopper;i<10;i++)
+                anDigits[i]=0;
+
+            if(start>4){
+                stopper=start;
+                if(qNum['type'])
+                    stopper=5+qNum['pre'];
+                qNum['number']=qNum['ans']='0.';
+                for(var i=5;i<start;i++){
+                    qNum['number']+='0';
+                    if(i<stopper)
+                        qNum['ans']+='0';
+                }
+            }
+            for(var i=start; i<=stop; i++, j++){
+                if(i===5 && i!=start){
+                    qNum['number']+='.';
+                    if(j<=qNum['pre'])
+                        qNum['ans']+='.';
+                }
+                qNum['number']+=digits[i];
+                if(j<=qNum['pre'])
+                    qNum['ans']+=anDigits[i];
+                else if(qNum['type']===0&& i<5)
+                        qNum['ans']+='0';
+            }
+            if(stop<4){
+                stopper=5;
+                if(qNum['type'])
+                    stopper=5+qNum['pre'];
+                for(var i=stop+1;i<stopper;i++){
+                    if(i==5)
+                        qNum['ans']+='.';
+                    if(i<5)
+                        qNum['number']+='0';
+                    qNum['ans']+='0';
+                }
+            }
+            if(qNum['type']){
+                qNum['rnd']='('+qNum['pre']+'dp)';
+                qNum['pre']+=' decimal places.';
+            }
+            else{
+                qNum['rnd']='('+qNum['pre']+'sf)';
+                qNum['pre']+=' significant figures.';
+            }
+        qNum['question']='<p>Round [$][number][$] to [pre]</p>';
+        qNum['answer']='<p>[$]=[ans][$] [rnd]</p>';            
+			]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Numbers</category>
+        <subcategory>Decimals</subcategory>  
+        <title>Conversion to Fraction</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+    var number = randomDigitInt(),
+            exp = randomLowInt(1, 10, 3),
+            index = Math.pow(10, exp),
+            integer = Math.floor(number / index),
+            rational, alt = '', altUnsimplified,
+            altRational = new Fraction(1, 1);
+    if (integer) {
+        rational = number % (integer * index);
+        if(rational){
+            alt = '<p>or<br/>[$][altanswer][$]</p>';
+            altRational = new Fraction(rational, index);
+            altUnsimplified = integer + ' ' + rational + '/' + index;
+        }
+    }
+    else {
+        rational = '';
+        for (var i = 0; i < exp - number.toString().length; i++)
+            rational += '0';
+        rational += number;
+    }
+    var answer = new Fraction(parseInt(rational), index).add(integer);
+    var unsimplified = number + '/' + index;
+    var qNum={
+        "number": integer + '.' + rational,
+        "ans": unsimplified,
+        "or": alt,
+        "altanswer": altUnsimplified,
+        "$": "`"
+    };
+    if (unsimplified != answer.string())
+        qNum['ans'] += '=' + answer.string();
+    if (altUnsimplified != answer.improperString())
+        qNum['altanswer'] += '=' + answer.improperString();
+        qNum['question']='<p>Write [number] as a fraction or mixed number</p>';
+        qNum['answer']='<p>[$][ans][$]</p>[?or]';
+			]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Numbers</category>
+        <subcategory>Ratio</subcategory>  
+        <title>Simplifying</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+	    var qType=randomInt(0,3), g=0;
+            var qNum={
+		    ':'	:	'',
+		    c	:	'',
+		    z	:	'',
+                    "$"     :   "`"
+            };
+	    switch(qType){
+		case 0:
+		    do{
+			qNum['a']=randomInt(2,20);
+			qNum['b']=randomInt(2,20);
+			g=gcd(qNum['a'],qNum['b']);
+		    }
+		    while(g==1);
+		    qNum['x']=qNum['a']/g;
+		    qNum['y']=qNum['b']/g;
+		    break;
+		case 1:
+		    qNum[':']=':';
+		    do{
+			qNum['a']=randomInt(2,20);
+			qNum['b']=randomInt(2,20);
+			qNum['c']=randomInt(2,20);
+			g=gcd(qNum['a'],qNum['b']);
+			g=gcd(g,qNum['c']);
+		    }
+		    while(g==1);
+		    qNum['x']=qNum['a']/g;
+		    qNum['y']=qNum['b']/g;
+		    qNum['z']=qNum['c']/g;
+		    break;
+		case 2:
+		    var units=['sec','min','h'];
+		    var type1=randomInt(0,2);
+		    var type2=randomInt(0,2);
+		    do{
+			qNum['a']=randomInt(1,40);
+			qNum['b']=randomInt(1,40);
+			g=gcd(qNum['a']*Math.pow(60,type1),qNum['b']*Math.pow(60,type2));
+		    }
+		    while(g==1);
+		    qNum['x']=qNum['a']*Math.pow(60,type1)/g;
+		    qNum['y']=qNum['b']*Math.pow(60,type2)/g;
+		    qNum['a']+=units[type1];
+		    qNum['b']+=units[type2];
+		    break;
+		case 3:
+		    var units=['mm','m','km'];
+		    var type1=randomInt(0,2);
+		    var type2=randomInt(0,2);
+		    do{
+			qNum['a']=randomInt(1,100);
+			qNum['b']=randomInt(1,100);
+			g=gcd(qNum['a']*Math.pow(1000,type1),qNum['b']*Math.pow(1000,type2));
+		    }
+		    while(g==1);
+		    qNum['x']=qNum['a']*Math.pow(1000,type1)/g;
+		    qNum['y']=qNum['b']*Math.pow(1000,type2)/g;
+		    qNum['a']+=units[type1];
+		    qNum['b']+=units[type2];
+		    break;
+            }
+        qNum['question']='<p>Express the following ratio in its simplest form:</p></p>[$][a]:[b][:][c][$]</p>';
+        qNum['answer']='<p>[$][x]:[y][:][z][$]</p>';        
+			]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Numbers</category>
+        <subcategory>Ratio</subcategory>  
+        <title>Finding a Quantity</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+	    var types=['cats','dogs','men','women','apples','oranges','pears','pens','pencils','lollies','coins','marbles','stones','eggs'];
+	    var first=randomInt(0,1);
+            var qNum={
+		a	:	randomInt(1,10),
+		b	:	randomInt(1,10),
+		z	:	'',
+		"$"     :   "`"
+            };
+	    if(qNum['a']==qNum['b'])
+		qNum['b']+=1;
+	    var g=gcd(qNum['a'],qNum['b']);
+	    qNum['a']/=g;
+	    qNum['b']/=g;
+	    qNum['thing1']=types[randomInt(0,types.length-1)];
+	    do{
+		qNum['thing2']=types[randomInt(0,types.length-1)];
+	    }
+	    while(qNum['thing1']==qNum['thing2']);
+	    var scale=randomInt(2,15);
+	    if(first){
+		qNum['x']=qNum['p']=qNum['a']*scale;
+		qNum['y']=qNum['q']=qNum['b']*scale;
+		qNum['frac']=qNum['b']+'/'+qNum['a'];
+		qNum['things1']=qNum['thing1'];
+		qNum['things2']=qNum['thing2'];
+	    }
+	    else{
+		qNum['y']=qNum['p']=qNum['b']*scale;
+		qNum['x']=qNum['q']=qNum['a']*scale;
+		qNum['frac']=qNum['a']+'/'+qNum['b'];
+		qNum['things1']=qNum['thing2'];
+		qNum['things2']=qNum['thing1'];
+	    }
+        qNum['question']='<p>The ratio of [thing1] to [thing2] is [$][a]:[b][$]. If there are [p] [things1] then how many [things2] are there?</p>';
+        qNum['answer']='<p>[$][a]:[b]=[x]:[y][$]</p>';            
+			]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Numbers</category>
+        <subcategory>Ratio</subcategory>  
+        <title>Dividing a Total</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+	    var first=randomInt(0,1);
+            var qNum={
+		    a	:	randomInt(1,10),
+		    b	:	randomInt(1,10),
+		    z	:	'',
+                    "$"     :   "`"
+            };
+	    if(qNum['a']==qNum['b'])
+		    qNum['b']+=1;
+	    var g=gcd(qNum['a'],qNum['b']);
+	    qNum['a']/=g;
+	    qNum['b']/=g;
+	    qNum['c']=randomInt(5,30);
+	    qNum['a+b']=qNum['a']+qNum['b'];
+	    qNum['p']=qNum['a+b']*qNum['c'];
+	    qNum['ac']=qNum['a']*qNum['c'];
+	    qNum['bc']=qNum['b']*qNum['c'];
+        qNum['question']='<p>Divide [p] into the ratio [$][a]:[b][$]</p>';
+        qNum['answer']='<p>[$][a]+[b]=[a+b][$]</p><br/></p>[$][p]-:[a+b]=[c][$]</p></p>[$][a]xx[c]=[ac][$] and [$][b]xx[c]=[bc][$]</p></p><b>OR</b></p></p>[$][p]xx[a]/[a+b]=[ac][$] and [$][p]xx[b]/[a+b]=[bc][$]</p><br/></p>Answer: [ac] and [bc]</p>';            
+			]]>
+        </code>
+    </question>
+
+    <question>
+        <category>Numbers</category>
+        <subcategory>Rates</subcategory>  
+        <title>Finding a Rate</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+	    var lengths=['mm','cm','m','km'];
+	    var weights=['mg','g','kg'];
+	    var times=['sec','min','h','days','weeks','months','years'];
+            var qNum={
+		    a	:	randomInt(2,100),
+		    b	:	randomInt(2,100),
+                    "$"     :   "`"
+            };
+	    var unitType1=randomInt(0,2);
+	    var unitType2;
+	    do{
+		unitType2=randomInt(0,2);
+	    }
+	    while(unitType1==unitType2);
+	    switch(unitType1)
+	    {
+		case 0:
+			qNum['unit1']=randomArrayElement(lengths);
+			break;
+		case 1:
+			qNum['unit1']=randomArrayElement(weights);
+			break;
+		case 2:
+			qNum['unit1']=randomArrayElement(times);
+			break;
+	    }
+	    switch(unitType2)
+	    {
+		case 0:
+			qNum['unit2']=randomArrayElement(lengths);
+			break;
+		case 1:
+			qNum['unit2']=randomArrayElement(weights);
+			break;
+		case 2:
+			qNum['unit2']=randomArrayElement(times);
+			break;
+	    }
+	    qNum['a/b']=Math.round(qNum['a']/qNum['b']*100)/100;
+        qNum['question']='<p>What rate is [a][unit1] every [b][unit2]? <br />(give answer to 2dp)</p>';
+        qNum['answer']='<p>[$][a]-:[b]=[a/b][$] (2dp)</p><p>so it is [a/b] [unit1]/[unit2]</p>';            
+			]]>
+        </code>
+    </question>
+
+    <question>
+        <category>Numbers</category>
+        <subcategory>Rates</subcategory>  
+        <title>Rate Problems</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+	    var objects=['A car travels at a speed of','Water is flowing at a rate of','A tree grows at a rate of','The density of a substance is','Fruit at the super market costs'];
+	    var will1=['How long will it take to travel','How long will it take to fill','How long will it take to grow','What volume will be occupied by','What weight of fruit will cost'];
+	    var will2=['How far will it travel in', 'How many litres will flow in','How high will it grow in','What is the weight of', 'What is the cost of'];
+	    var u1=['km','L','mm','kg','$'];
+	    var u2=['h','s','day','m^3','kg'];
+	    var s1=['','','','',''];
+	    var s2=['','','s','',''];
+	    var r1=[10 ,2 ,10 ,1,1];
+	    var r2=[120,20,100,5,20];
+	    var qType=randomInt(0,objects.length-1);
+	    var uType=randomInt(0,1);
+            var qNum={
+		r		:	randomInt(r1[qType],r2[qType]),
+		p		:	randomInt(2,100),
+		object	:	objects[qType],
+		unit1	:	u1[qType],
+		unit2	:	u2[qType],
+		n		:	'',
+		"$"     :   "`"
+            };
+	    if(uType){
+		qNum['will']=will1[qType];
+		qNum['unit3']=u1[qType];
+		qNum['unit4']=u2[qType];
+		qNum['multdiv']='-:';
+		qNum['q']=Math.round(qNum['p']/qNum['r']*100)/100;
+		qNum['s']=s1[qType];
+		qNum['ss']=s2[qType];
+	    }
+	    else{
+		qNum['will']=will2[qType];
+		qNum['unit3']=u2[qType];
+		qNum['unit4']=u1[qType];
+		qNum['multdiv']='xx';
+		qNum['q']=Math.round(qNum['p']*qNum['r']*100)/100;
+		qNum['s']=s2[qType];
+		qNum['ss']=s1[qType];
+	    }
+	    if(qNum['q']%1==0)
+		qNum['q']+='.00';
+        qNum['question']='<p>[object] [r] [$][unit1][$]/[$][unit2][$].[will] [p] [$][unit3][s][$]?</p><p>Give your answer as a decimal to 2 dp.</p>';
+        qNum['answer']='<p>Since we are finding an amount of [$][unit3][s][$], we [$][multdiv][$] by the rate.</p><p>[$][p][multdiv][r]=[q][unit4][ss][$] (2dp)</p>';                
+			]]>
+        </code>
+    </question>
+
+    <question>
+        <category>Numbers</category>
+        <subcategory>Rates</subcategory>  
+        <title>Converting Rates</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+	    var units=[ ['mm','m','km'], ['mg','g','kg'], ['ml','l'], ['s','min','h'],['\\text{inch}','ft']];
+	    var scale=[1000,1000,1000,60,12];
+	    var uType1=randomInt(0,units.length-1);
+	    var uType2=randomInt(0,units.length-1);
+	    while(uType1==uType2)
+		uType2=randomInt(0,units.length-1);
+	    var unit1=units[uType1];
+	    var unit2=units[uType2];
+	    var u1,u2,u3,u4;
+	    do{
+		u1=randomInt(0,unit1.length-1);
+		u2=randomInt(0,unit2.length-1);
+		u3=randomInt(0,unit1.length-1);
+		u4=randomInt(0,unit2.length-1);
+	    }
+	    while(u1==u3 && u2==u4);
+	    var qNum={
+		r	:	new Fraction(randomInt(10,100),1),
+		unit1	:	unit1[u1],
+		unit2	:	unit2[u2],
+		unit3	:	unit1[u3],
+		unit4	:	unit2[u4],
+		ifc1	:	'To convert from [$][unit1][$] to [$][unit3][$], we [$][multdivp][$] by [p]</p></p>[$][r][$] [$][unit1][$]/[$][unit2]=[rp][$] [$][unit3][$]/[$][unit2][$]',
+		ifc2	:	'To convert from [$][unit2][$] to [$][unit4][$], we [$][multdivq][$] by [q]</p></p>[$][rp][$] [$][unit3][$]/[$][unit2]=[rq][$] [$][unit3][$]/[$][unit4][$]',
+		"$"     :   "`"
+	    };
+		if(u1>u3)
+		    qNum['multdivp']='xx';
+		else if(u1<u3)
+		    qNum['multdivp']='-:';
+		else
+		    qNum['ifc1']='';
+		if(u2<u4)
+		    qNum['multdivq']='xx';
+		else if(u2>u4)
+		    qNum['multdivq']='-:';
+		else
+		    qNum['ifc2']='';
+		qNum['p']=new Fraction(Math.pow(scale[uType1],u1-u3),1);
+		qNum['q']=new Fraction(Math.pow(scale[uType2],u4-u2),1);
+		qNum['rp']=qNum['r'].mult(qNum['p']).decimal();
+		qNum['rq']=qNum['r'].mult(qNum['p']).mult(qNum['q']).decimal();
+		qNum['p']=Math.pow(scale[uType1],Math.abs(u1-u3));
+		qNum['q']=Math.pow(scale[uType2],Math.abs(u4-u2));
+        qNum['question']='<p>Convert the following rate:</p><p>[$][r][$] [$][unit1][$]/[$][unit2][$]</p><p>into</p><p>[$][unit3][$]/[$][unit4][$]</p>';
+        qNum['answer']='<p>[?ifc1]</p>';               
+			]]>
+        </code>
+    </question>
+
+    <question>
+        <category>Numbers</category>
+        <subcategory>Percentages</subcategory>  
+        <title>Percentages of things</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+            var qNum={
+		p	:	randomInt(1,99),
+		q	:	randomInt(10,1000),
+		"$"     :   "`"
+            };
+	    qNum['dp']=qNum['p']/100;
+	    qNum['a']=qNum['q']*qNum['p']/100;
+        qNum['question']='<p>Find [p]% of [q]</p>';
+        qNum['answer']='<p><b>Using Decimals:</b></p><p>[$][q]xx[dp]=[a][$]</p>';            
+			]]>
+        </code>
+    </question>
+
+    <question>
+        <category>Numbers</category>
+        <subcategory>Percentages</subcategory>  
+        <title>Percentage Increase/Decrease</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+	var qNum={
+	    p	:	randomInt(1,50),
+	    q	:	randomInt(10,1000),
+	    crease:	randomArrayElement(['increase','decrease']),
+	    "$"     :   "`"
+	};
+	    if(qNum['crease']=='increase'){
+		qNum['lp']=qNum['p']+100;
+		qNum['dp']=1+qNum['p']/100;
+	    }
+	    else{
+		qNum['lp']=100-qNum['p'];
+		qNum['dp']=1-qNum['p']/100;
+	    }
+	    qNum['a']=qNum['q']*qNum['lp']/100;
+        qNum['question']='<p>[crease] [q] by [p]%</p>';
+        qNum['answer']='<p>In other words: Find [lp]% of [q]</p><p><b>Using Decimals:</b></p><p>[$][q]xx[dp]=[a][$]</p>';            
+			]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Numbers</category>
+        <subcategory>Surds</subcategory>  
+        <title>Simplifying Surds</title>
+        <suitable>
+            <course>UONPREP093</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+             var noSquareFactors=[2,3,5,6,7,10,11,13,14,15];
+             var qNum={
+               "a":"",
+               "xx":"",
+               "so":"",
+               "sbx":randomInt(2,10),
+               "by":randomArrayElement(noSquareFactors),
+               "$":"`"
+             };
+             qNum['bx']=qNum['sbx']*qNum['sbx'];
+             qNum['b']=qNum['bx']*qNum['by'];
+             if(randomInt(0,1)){
+                 qNum['a']=randomInt(2,15);
+                 qNum['xx']='xx';
+                 qNum['asbx']=qNum['a']*qNum['sbx'];
+                 qNum['so']='<p>so <br/> [$][a] sqrt([b])=[a][xx] [sbx] sqrt([by])=[asbx] sqrt([by])[$]</p>'
+             }
+        qNum['question']='<p>Simplify the following surd</p><p>[$][a] sqrt([b])[$]</p>';
+        qNum['answer']='<p>[$]sqrt([b])=sqrt([bx]xx[by])=sqrt([bx])xx sqrt([by])=[sbx] sqrt([by])[$]</p>[?so]';             
+            ]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Algebra</category>
+        <subcategory>Basics</subcategory>  
+        <title>Like Terms</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+            var qNum={
+                    simplify :   '[$]',
+                    answer1  :   '',
+                    answer2 :   '',
+                    "$"     :   "`"
+            };
+            var pronumeral=['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z'];
+            var noTerms=randomInt(2,6);
+            var noTypes=randomInt(1,noTerms-1);
+            var types = new Array(noTypes);
+            var termType= new Array(noTerms);
+            var coef=new Array(noTerms);
+            var countTypes=new Array(noTypes);
+            var totalTypes=new Array(noTypes);
+            var answerStrings=new Array(noTypes);
+            for(var i=0;i<noTypes;i++){
+                countTypes[i]=0;
+                totalTypes[i]=0;
+                answerStrings[i]='';
+                var noPr=randomInt(1,3);
+                var l1=randomInt(0,pronumeral.length-1);
+                var l2=randomInt(l1,pronumeral.length-1);
+                var l3=randomInt(l2,pronumeral.length-1);
+                types[i]=pronumeral[l1];
+                if(noPr==3 && l1==l2 && l2==l3)
+                    types[i]+='^3';
+                else if(noPr>1 && l1==l2){
+                    types[i]+='^2';
+                    types[i]+=' '+pronumeral[l3];
+                }
+                else if(noPr>1){
+                    types[i]+=' '+pronumeral[l2];
+                    if(noPr==3 && l2==l3)
+                        types[i]+='^2';
+                    else if(noPr==3)
+                        types[i]+=' '+pronumeral[l3];
+                }
+                if(i>0 && types[i]==types[i-1])
+                    i--;
+                else if(i>1 && types[i]==types[i-2])
+                    i--;
+                else if(i>2 && types[i]==types[i-3])
+                    i--;
+                else if(i>3 && types[i]==types[i-4])
+                    i--;
+            }
+            for(var i=0;i<noTerms;i++){
+                coef[i]=randomInt(1,9);
+                var c=coef[i];
+                if(coef[i]==1)
+                    c='';
+                if(randomInt(0,1)){
+                    if(i)
+                        c='+'+c;
+                }
+                else{
+                    c='-'+c;
+                    coef[i]*=-1;
+                }
+                var thisType=randomInt(0,types.length-1);
+                termType[i]=thisType;
+                qNum['simplify']+=' '+c+types[thisType];
+            }
+            qNum['simplify']+='[$]';
+
+            for(var i=0;i<noTerms;i++){
+                countTypes[termType[i]]+=1;
+                totalTypes[termType[i]]+=coef[i];
+                if(answerStrings[termType[i]]=='' || coef[i]<0)
+                    answerStrings[termType[i]]+=coef[i];
+                else
+                    answerStrings[termType[i]]+='+ '+coef[i];
+            }
+            for(var i=0;i<noTypes;i++){
+                if(countTypes[i]>1){
+                    var t=totalTypes[i];
+                    if(t==1)
+                        t='';
+                    else if(t==-1)
+                        t='-';
+                    qNum['answer1']+='There are '+countTypes[i]+' of the [$]'+types[i]+'[$] terms.<br/> Since [$]'+answerStrings[i]+'='+totalTypes[i]+'[$], these terms become [$]'+t+types[i];
+                    if(totalTypes[i]==0){
+                        qNum['answer1']+='=0';
+                    }
+                    qNum['answer1']+='[$].</p>';
+                }
+            }
+            qNum['answer1']+='</p>So the answer is:<br/>[$]';
+            for(var i=0;i<noTypes;i++){
+                var t=totalTypes[i];
+                    if(t==1)
+                        t='';
+                    else if(t==-1)
+                        t='-';
+                if(totalTypes[i]>0 && qNum['answer2']!='')
+                    qNum['answer2']+='+'+t+types[i];
+                else if(totalTypes[i]!=0)
+                    qNum['answer2']+=t+types[i];
+            }
+            if(qNum['answer2']=='')
+                qNum['answer2']='0';
+            qNum['answer2']+='[$]';
+        qNum['question']='<p>Simplify the following expression:</p><p>[?simplify]</p>';
+        qNum['answer']='<p>[?answer1][?answer2]</p>';            
+			]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Algebra</category>
+        <subcategory>Basics</subcategory>  
+        <title>Evaluating an Algebraic Expression</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+var a=new Fraction(randomInt(-9,9),1);
+var b=new Fraction(randomInt(-9,9),1);
+var c=new Fraction(randomInt(-9,9),1);
+var qNum={
+		"a"     :   a.string(),
+		"b"     :   b.string(),
+		"c"     :   c.string(),
+		"t"     :   '',
+		"expr"  :   '',
+		"aexpr1":   '',
+		"aexpr2":   '',
+		"ans"   :   '',
+		"$"     :   "`"
+};
+switch(randomInt(0,15)){
+	case 0:
+		qNum['expr']='ab+c';
+		qNum['aexpr1']='[a]xx[b]+ [c]';
+		qNum['aexpr2']='[t]+ [c]';
+		qNum['t']=a.mult(b).string();
+		qNum['ans']=a.mult(b).add(c).string();
+		break;
+	case 1:
+		qNum['expr']='ab-c';
+		qNum['aexpr1']='[a]xx[b]- [c]';
+		qNum['aexpr2']='[t]- [c]';
+		qNum['t']=a.mult(b).string();
+		qNum['ans']=a.mult(b).sub(c).string();
+		break;
+	case 2:
+		qNum['expr']='a+bc';
+		qNum['aexpr1']='[a]+ [b]xx[c]';
+		qNum['aexpr2']='[a]+ [t]';
+		qNum['t']=b.mult(c).string();
+		qNum['ans']=b.mult(c).add(a).string();
+		break;
+	case 3:
+		qNum['expr']='a-bc';
+		qNum['aexpr1']='[a]- [b]xx[c]';
+		qNum['aexpr2']='[a]- [t]';
+		qNum['t']=b.mult(c).string();
+		var temp = b.mult(c);
+		qNum['ans']=a.sub(temp).string();
+		break;
+	case 4:
+		qNum['expr']='a/b+c';
+		if(b.numerator==0){
+			b=new Fraction(nonZeroRand(-9,9),1);
+			qNum['b']=b.string();
+		}
+		qNum['aexpr1']='[a]-:[b]+ [c]';
+		qNum['aexpr2']='[t]+ [c]';
+		qNum['t']=a.div(b).string();
+		qNum['ans']=a.div(b).add(c).string();
+		break;
+	case 5:
+		qNum['expr']='a/b-c';
+		if(b.numerator==0){
+			b=new Fraction(nonZeroRand(-9,9),1);
+			qNum['b']=b.string();
+		}
+		qNum['aexpr1']='[a]-:[b]- [c]';
+		qNum['aexpr2']='[t]- [c]';
+		qNum['t']=a.div(b).string();
+		qNum['ans']=a.div(b).sub(c).string();
+		break;
+	case 6:
+		qNum['expr']='a+b/c';
+		if(c.numerator==0){
+			c=new Fraction(nonZeroRand(-9,9),1);
+			qNum['c']=c.string();
+		}
+		qNum['aexpr1']='[a]+ [b]-:[c]';
+		qNum['aexpr2']='[a]+ [t]';
+		qNum['t']=b.div(c).string();
+		qNum['ans']=b.div(c).add(a).string();
+		break;
+	case 7:
+		qNum['expr']='a-b/c';
+		if(c.numerator==0){
+			c=new Fraction(nonZeroRand(-9,9),1);
+			qNum['c']=c.string();
+		}
+		qNum['aexpr1']='[a]- [b]-:[c]';
+		qNum['aexpr2']='[a]+ [t]';
+		qNum['t']=b.div(c).string();
+		var temp=b.div(c);
+		qNum['ans']=a.sub(temp).string();
+		break;
+	case 8:
+		qNum['expr']='(a+b)c';
+		qNum['aexpr1']='([a]+ [b])xx[c]';
+		qNum['aexpr2']='[t]xx[c]';
+		qNum['t']=a.add(b).string();
+		qNum['ans']=a.add(b).mult(c).string();
+		break;
+	case 9:
+		qNum['expr']='(a-b)c';
+		qNum['aexpr1']='([a]- [b])xx[c]';
+		qNum['aexpr2']='[t]xx[c]';
+		qNum['t']=a.sub(b).string();
+		qNum['ans']=a.sub(b).mult(c).string();
+		break;
+	case 10:
+		qNum['expr']='a(b+c)';
+		qNum['aexpr1']='[a]xx([b]+ [c])';
+		qNum['aexpr2']='[a]xx[t]';
+		qNum['t']=b.add(c).string();
+		qNum['ans']=b.add(c).mult(a).string();
+		break;
+	case 11:
+		qNum['expr']='a(b-c)';
+		qNum['aexpr1']='[a]xx([b]- [c])';
+		qNum['aexpr2']='[a]xx[t]';
+		qNum['t']=b.sub(c).string();
+		qNum['ans']=b.sub(c).mult(a).string();
+		break;
+	case 12:
+		qNum['expr']='(a+b)/c';
+		if(c.numerator==0){
+			c=new Fraction(nonZeroRand(-9,9),1);
+			qNum['c']=c.string();
+		}
+		qNum['aexpr1']='([a]+ [b])-:[c]';
+		qNum['aexpr2']='[t]-:[c]';
+		qNum['t']=a.add(b).string();
+		qNum['ans']=a.add(b).div(c).string();
+		break;
+	case 13:
+		qNum['expr']='(a-b)/c';
+		if(c.numerator==0){
+			c=new Fraction(nonZeroRand(-9,9),1);
+			qNum['c']=c.string();
+		}
+		qNum['aexpr1']='([a]- [b])-:[c]';
+		qNum['aexpr2']='[t]-:[c]';
+		qNum['t']=a.sub(b).string();
+		qNum['ans']=a.sub(b).div(c).string();
+		break;
+	case 14:
+		qNum['expr']='a/(b+c)';
+		while(b.add(c).numerator==0){
+			b=new Fraction(randomInt(-9,9),1);
+			qNum['b']=b.string();
+		}
+		qNum['aexpr1']='[a]-:([b]+ [c])';
+		qNum['aexpr2']='[a]-:[t]';
+		qNum['t']=b.add(c).string();
+		var temp=b.add(c);
+		qNum['ans']=a.div(temp).string();
+		break;
+	case 15:
+		qNum['expr']='a/(b-c)';
+		while(b.sub(c).numerator==0){
+			b=new Fraction(randomInt(-9,9),1);
+			qNum['b']=b.string();
+		}
+		qNum['aexpr1']='[a]-:([b]- [c])';
+		qNum['aexpr2']='[a]-:[t]';
+		qNum['t']=b.sub(c).string();
+		var temp=b.sub(c);
+		qNum['ans']=a.div(temp).string();
+		break;
+}
+        qNum['question']='<p>Evaluate the following expression:</p><p>[$][expr][$]</p><p>Given that:</p><p>[$]a=[a], b=[b], c=[c].[$]</p>';
+        qNum['answer']='<p>[$]=[?aexpr1][$]</p><p>[$]=[?aexpr2][$]</p><p>[$]=[ans][$]</p>';
+		]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Algebra</category>
+        <subcategory>Expanding Brackets</subcategory>  
+        <title>Expanding Brackets</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+            var pronumeral=['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z'];
+            var al=new Array(6);
+            var syms =[randomLowInt(0,2),randomLowInt(0,2),randomLowInt(0,2)]
+            if(syms[1]==syms[2])
+                syms[1]++;
+            for(var i=0;i<3;i++){
+                al[i]=new algebra();
+                al[i].coef[0]=new Fraction(randomInt(1,9),1);
+                al[i].terms[0]=new term();
+                for(var j=0;j<syms[i];j++){
+                    var ind=new Fraction(randomLowInt(1,5),1);
+                    al[i].terms[0].addSymbol(randomArrayElement(pronumeral),ind);
+                }
+            }
+            al[3]=al[1].add(al[2]);
+            al[4]=al[0].mult(al[1]);
+            al[5]=al[0].mult(al[2]);
+            var qNum={
+                    "a"     :   al[0].string(),
+                    "b"     :   al[1].string(),
+                    "c"     :   al[2].string(),
+                    "+"     :   randomArrayElement(['+','-']),
+                    "bc"    :   al[3].string(),
+                    "ab"    :   al[4].string(),
+                    "ac"    :   al[5].string(),
+                    "abpac" :   al[4].add(al[5]).string(),
+                    "$"     :   "`"
+            };
+            if(qNum['+']=='-'){
+                qNum['bc']= al[1].sub(al[2]).string();
+                qNum['abpac']=al[4].sub(al[5]).string();
+            }
+        qNum['question']='<p>Expand the brackets:</p><p>[$][a]([bc])[$]</p>';
+        qNum['answer']='<p>[$][a]xx[b]=[ab][$]</p><p>[$][a]xx[c]=[ac][$]</p><p>So the answer is:</p><p>[$][abpac][$]</p>';            
+			]]>
+        </code>
+    </question>
+      
+    <question>
+        <category>Algebra</category>
+        <subcategory>Expanding Brackets</subcategory>  
+        <title>Expanding Two Brackets</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+            var pronumeral=['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z'];
+            var al=new Array(11);
+            var syms =[randomLowInt(0,2),randomLowInt(0,2),randomLowInt(0,2),randomLowInt(0,2)];
+            if(syms[0]==syms[1])
+                syms[1]++;
+            if(syms[2]==syms[3])
+                syms[3]++;
+            for(var i=0;i<4;i++){
+                al[i]=new algebra();
+                if(i==1 || i==3)
+                    al[i].coef[0]=new Fraction(nonZeroRand(-9,9),1);
+                else
+                    al[i].coef[0]=new Fraction(randomInt(1,9),1);
+                al[i].terms[0]=new term();
+                for(var j=0;j<syms[i];j++){
+                    var ind=new Fraction(randomLowInt(1,5),1);
+                    al[i].terms[0].addSymbol(randomArrayElement(pronumeral),ind);
+                }
+            }
+            al[4]=al[0].mult(al[2]);
+            al[5]=al[0].mult(al[3]);
+            al[6]=al[1].mult(al[2]);
+            al[7]=al[1].mult(al[3]);
+            al[8]=al[4].add(al[5]).add(al[6]).add(al[7]);
+            al[9]=al[0].add(al[1]);
+            al[10]=al[2].add(al[3]);
+            var qNum={
+                    "a"     :   al[0].string(),
+                    "b"     :   al[1].string(),
+                    "c"     :   al[2].string(),
+                    "d"     :   al[3].string(),
+                    "ac"    :   al[4].string(),
+                    "ad"    :   al[5].string(),
+                    "bc"    :   al[6].string(),
+                    "bd"    :   al[7].string(),
+                    "all"   :   al[8].string(),
+                    "ab"    :   al[9].string(),
+                    "cd"    :   al[10].string(),
+                    "$"     :   "`"
+            };
+        qNum['question']='<p>Expand the brackets:</p><p>[$]([ab])([cd])[$]</p>';
+        qNum['answer']='<p>[$][a]xx[c]=[ac][$]  and  [$][a]xx[d]=[ad][$]</p><p>[$][b]xx[c]=[bc][$]  and  [$][b]xx[d]=[bd][$]</p><p>So the answer is:</p><p>[$][all][$]</p>';            
+			]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Algebra</category>
+        <subcategory>Expanding Brackets</subcategory>  
+        <title>Perfect Squares</title>
+        <suitable>
+            <course>UONPREP093</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+    var pronumeral = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'];
+    var al1=new algebra(), al2=new algebra();
+    al1.coef[0] = new Fraction(randomInt(1, 9), 1);
+    al2.coef[0] = new Fraction(nonZeroRand(-9, 9), 1);
+    var syms = [randomLowInt(0, 2), randomLowInt(0, 2)];
+    if(syms[0]==syms[1] && syms[1]==0)
+        syms[1]=1;
+    al1.terms[0] = new term();
+    al2.terms[0] = new term();
+    var i=0,j=0;
+    while(i++<syms[0]){
+        var ind = new Fraction(randomLowInt(1, 5), 1);
+        al1.terms[0].addSymbol(randomArrayElement(pronumeral), ind);
+    }
+    while(j++<syms[1]){
+        var ind = new Fraction(randomLowInt(1, 5), 1);
+            al2.terms[0].addSymbol(randomArrayElement(pronumeral), ind);
+    }
+    var al3=al1.mult(al1), al4=al1.mult(al2), al5=al2.mult(al2);
+    var qNum={
+        "a": al1.string(),
+        "b": al2.string(),
+        "ab": al1.add(al2).string(),
+        "aa": al3.string(),
+        "axb": al4.string(),
+        "2axb": al4.add(al4).string(),
+        "bb": al5.string(),
+        "aapab":al3.add(al4).string(),
+        "abpbb":al4.add(al5).string(),
+        "all": al3.add(al4).add(al4).add(al5).string(),
+        "pm":'+',
+        "$": "`"
+    };
+    if(al4.coef[0].negative)
+        qNum['pm']='';
+        qNum['question']='<p>Expand the brackets:</p><p>[$]([ab])^2[$]</p>';
+        qNum['answer']='<div style="float: left">   
+                <p>[$]([ab])^2=([ab])([ab])[$]</p>
+                <p>now expand brackets for [$]([ab])([ab])[$]</p>
+                <p>[$][a]xx[a]=[aa][$]  and  [$][a]xx[b]=[axb][$]  and  [$][b]xx[b]=[bb][$]</p>
+                <p>So the answer is:</p>
+                <p>[$][aapab][pm][abpbb]=[all][$]</p>
+            </div>
+            <div style="border: thin solid; float: left; padding-left: 1em; margin-left: 1em;">
+                <p><b>Alternatively</b> using the pattern of perfect squares:</p>
+                <p>[$](a+b)^2=a^2+2ab+b^2[$]</p>
+                <p>[$][a]xx[a]=[aa][$]  and  [$]2xx[a]xx[b]=[2axb][$]  and  [$][b]xx[b]=[bb][$]</p>
+                <p>So the answer is: [$][all][$]</p>
+            </div>';        
+			]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Algebra</category>
+        <subcategory>Expanding Brackets</subcategory>  
+        <title>Difference of Squares</title>
+        <suitable>
+            <course>UONPREP093</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+    var pronumeral = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'];
+    var nOne=new algebra();
+    nOne.coef[0]=new Fraction(-1,1);
+    nOne.terms[0]=new term();
+    var al1=new algebra(), al2=new algebra();
+    al1.coef[0] = new Fraction(randomInt(1, 9), 1);
+    al2.coef[0] = new Fraction(nonZeroRand(-9, 9), 1);
+    var syms = [randomLowInt(0, 2), randomLowInt(0, 2)];
+    if(syms[0]==syms[1] && syms[1]==0)
+        syms[1]=1;
+    al1.terms[0] = new term();
+    al2.terms[0] = new term();
+    var i=0,j=0;
+    while(i++<syms[0]){
+        var ind = new Fraction(randomLowInt(1, 5), 1);
+            al1.terms[0].addSymbol(randomArrayElement(pronumeral), ind);
+    }
+    while(j++<syms[1]){
+        var ind = new Fraction(randomLowInt(1, 5), 1);
+            al2.terms[0].addSymbol(randomArrayElement(pronumeral), ind);
+    }
+    var al3=al2.mult(nOne), al4=al1.mult(al3).add(al2.mult(al2));
+    var qNum={
+        "a": al1.string(),
+        "b": al2.string(),
+        "apb": al1.add(al2).string(),
+        "amb": al1.sub(al2).string(),
+        "mb":al3.string(),
+        "aa": al1.mult(al1).string(),
+        "bb": al2.mult(al2).string(),
+        "axmb": al1.mult(al3).string(),
+        "axb":al1.mult(al2).string(),
+        "aapab": al1.mult(al1).add(al1.mult(al2)).string(),
+        "abpbb":al4.string(),
+        "all": al1.mult(al1).sub(al2.mult(al2)).string(),
+        "pm":'+',
+        "$": "`"
+    };
+    if(al4.coef[0].negative)
+        qNum['pm']='';
+        qNum['question']='<p>Expand the brackets:</p>
+            <p>[$]([apb])([amb])[$]</p>';
+        qNum['answer']='<div style="float: left">   
+                    <p>[$][a]xx[a]=[aa][$]  and  [$][a]xx[mb]=[axmb][$]</p>
+                    <p>[$][b]xx[a]=[axb][$]  and  [$][b]xx[b]=[bb][$]</p>
+                    <p>So the answer is:</p>
+                    <p>[$][aapab][pm][abpbb]=[all][$]</p>
+                </div>
+                <div style="border: thin solid; float: left; padding-left: 1em; margin-left: 1em;">
+                    <p><b>Alternatively</b> using the pattern of "difference of squares":</p>
+                    <p>[$](a+b)(a-b)=a^2-b^2[$]</p>
+                    <p>[$][a]xx[a]=[aa][$]  and  [$][b]xx[b]=[bb][$]</p>
+                    <p>So the answer is: [$][all][$]</p>
+                </div>';        
+            ]]>
+        </code>
+    </question>        
+  
+    <question>
+        <category>Algebra</category>
+        <subcategory>Factorisation</subcategory>  
+        <title>Common Factor</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+            var pronumeral=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+            var al=new Array(7);
+            var syms =[randomLowInt(0,2),randomLowInt(0,2),randomLowInt(0,2)]
+            if(syms[1]==syms[2])
+                syms[1]++;
+            for(var i=0;i<3;i++){
+                al[i]=new algebra();
+                if(i==0)
+                    al[i].coef[0]=new Fraction(randomInt(2,9),1);
+                else if(i==2)
+                    al[i].coef[0]=new Fraction(nonZeroRand(-9,9),1);
+                else
+                    al[i].coef[0]=new Fraction(randomInt(1,9),1);
+                al[i].terms[0]=new term();
+                for(var j=0;j<syms[i];j++){
+                    var ind=new Fraction(randomLowInt(1,5),1);
+                    al[i].terms[0].addSymbol(randomArrayElement(pronumeral),ind);
+                }
+            }
+	    var g=gcd(al[1].coef[0].numerator,al[2].coef[0].numerator);
+	    if(g!=1&&g!=-1){
+		al[1].coef[0]=al[1].coef[0].div(new Fraction(g,1));
+		al[2].coef[0]=al[2].coef[0].div(new Fraction(g,1));
+	    }
+            al[3]=al[1].add(al[2]);
+            al[4]=al[0].mult(al[1]);
+            al[5]=al[0].mult(al[2]);
+            al[6]=al[4].add(al[5]);
+            var qNum={
+                    "a"     :   al[0].string(),
+                    "b"     :   al[1].string(),
+                    "c"     :   al[2].string(),
+                    "bc"    :   al[3].string(),
+                    "ab"    :   al[4].string(),
+                    "ac"    :   al[5].string(),
+                    "abpac" :   al[6].string(),
+                    "$"     :   "`"
+            };
+        qNum['question']='<p>Factorise the following:</p><p>[$][abpac][$]</p>';
+        qNum['answer']='<p>The common factor is [$][a][$]</p><p>[$][a]xx[b]=[ab][$]  and  [$][a]xx[c]=[ac][$]</p><p>So the answer is:</p><p>[$][a]([bc])[$]</p>';            
+			]]>
+        </code>
+    </question>
+        
+    <question>
+        <category>Algebra</category>
+        <subcategory>Factorisation</subcategory>  
+        <title>Monic Quadratics</title>
+        <suitable>
+            <course>UONPREP093</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+    var p=nonZeroRand(-12,12),q=nonZeroRand(-12,12);
+    while(p+q==0)
+        q=nonZeroRand(-12,12);
+    var qNum={
+        "p":p,
+        "q":q,
+        "b":p+q,
+        "c":p*q,
+        "question":'[$]x^2 [+!b]x [+c][$]',
+      "$":"`"  
+    };
+        qNum['question']='<p>Factorise the following:</p><p>[?question]</p>';
+        qNum['answer']='<p>Find two numbers that add to give [$][b][$] and multiply to give [$][c][$]</p><p>[$][p][+q]=[b][$]</p><p>[$][p]xx[q]=[c][$]</p><p>Hence the solution is [$](x[+p])(x[+q])[$]</p>';    
+            ]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Algebra</category>
+        <subcategory>Factorisation</subcategory>  
+        <title>Non-Monic Quadratics</title>
+        <suitable>
+            <course>UONPREP093</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+    var cfs = [randomLowInt(2, 12), randomLowInt(1, 12), randomLowInt(1, 12), randomLowInt(1, 12)];
+    for (var i = 0; i < 4; i++)
+        cfs[i] *= nonZeroRand(-1, 1);
+    for (var i = 0; i < 2; i++) {
+        var g = gcd(cfs[i * 2], cfs[i * 2 + 1]);
+        if (g != 1) {
+            cfs[i * 2] /= g;
+            cfs[i * 2 + 1] /= g;
+        }
+    }
+    if (Math.abs(cfs[0]) == 1)
+        cfs[0] *= 5;
+    if (cfs[0] * cfs[3] + cfs[1] * cfs[2] == 0) {
+        do
+            cfs[0] = randomInt(-9, 9);
+        while (cfs[0] != cfs[2] && gcd(cfs[0], cfs[1]) != 1)
+    }
+    var qNum={
+        "p": cfs[0] * cfs[3],
+        "q": cfs[1] * cfs[2],
+        "a": cfs[0] * cfs[2],
+        "b": cfs[0] * cfs[3] + cfs[1] * cfs[2],
+        "c": cfs[1] * cfs[3],
+        "d": cfs[0] * cfs[1] * cfs[2] * cfs[3],
+        "a0": cfs[0],
+        "a1": cfs[1],
+        "a2": cfs[2],
+        "a3": cfs[3],
+        "$": "`"
+    };
+        qNum['question']='<p>Factorise the following:</p><p>[$][!a]x^2 [+!b]x [+c][$]</p>';
+        qNum['answer']='<p>First, noting that [$][a]xx[c]=[d][$],</p><p>Find two numbers that add to give [$][b][$] and multiply to give [$][d][$]</p><p>[$][p][+q]=[b][$]</p><p>[$][p]xx[q]=[d][$]</p><p>Re-write question as "Factorise [$][!a]x^2 [+!p]x [+!q]x [+c][$]"</p><p>[$][!a0]([!a2]x [+a3]) [+!a1]([!a2]x [+a3])[$]</p><p>[$]([!a2]x [+a3])([!a0]x [+a1])[$]</p>';    
+            ]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Algebra</category>
+        <subcategory>Factorisation</subcategory>  
+        <title>Perfect Squares</title>
+        <suitable>
+            <course>UONPREP093</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+    var pronumeral=['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z'];
+    var alg=new Array();
+    var syms=[randomLowInt(0,2),randomLowInt(0,2)];
+    if(syms[0]==syms[1] && syms[1]==0)
+        syms[1]=1;
+    for(var i=0;i<2;i++){
+        alg[i]=new algebra();
+        if(i)
+            alg[i].coef[0]=new Fraction(nonZeroRand(-9,9),1);
+        else
+            alg[i].coef[0]=new Fraction(nonZeroRand(1,9),1);
+        alg[i].terms[0]=new term();
+        for(var j=0;j<syms[i];j++)
+            alg[i].terms[0].addSymbol(randomArrayElement(pronumeral),new Fraction(randomLowInt(1,2)));
+    }
+    alg[2]=alg[0].mult(alg[0]);
+    alg[3]=alg[1].mult(alg[1]);
+    alg[4]=alg[0].mult(alg[1]);
+    var notSquare=true;
+    if(randomInt(0,1)){
+        //not a perfect square
+        alg[4].coef[0]=new Fraction(randomInt(-99,99),1);
+    }
+    else{
+        //IS a perfect sqare
+        alg[4]=alg[4].add(alg[4]);
+        notSquare=false;
+    }
+    alg[5]=alg[2].add(alg[4]).add(alg[3]);
+    var qNum={
+        "a":alg[0].string(),
+        "b":alg[1].string(),
+        "mb":alg[1].mult(-1).string(),
+        "aa":alg[2].string(),
+        "bb":alg[3].string(),
+        "nab":alg[4].string(),
+        "apb":alg[0].add(alg[1]).string(),
+        "exp":alg[5].string(),
+        "ifsquare":'<p>Therefore [$][exp]=([apb])^2[$]</p>',
+        "is":'is',
+        "$"     :   "`"
+    };
+    if(notSquare){
+        qNum['ifsquare']='';
+        qNum['is']='is not';
+    }
+        qNum['question']='<p>Determine if [$][exp][$] is a perfect square.</p><p>If it is a perfect square, then factorise it (do not factorise it otherwise).</p>';
+        qNum['answer']='<p>[$][aa][$] is the square of [$][a][$]</p><p>[$][bb][$] is the square of [$][b][$]  or  [$][mb][$]</p><p>[$][nab][$] [is] equal to [$]2xx[a]xx[b][$], hence [$][exp][$] [is] a perfect square.</p>[?ifsquare]';    
+            ]]>
+        </code>
+    </question>
+
+    <question>
+        <category>Algebra</category>
+        <subcategory>Factorisation</subcategory>  
+        <title>Difference of Squares</title>
+        <suitable>
+            <course>UONPREP093</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+    var pronumeral=['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z'];
+    var alg=new Array();
+    var syms=[randomLowInt(0,2),randomLowInt(0,2)];
+    if(syms[0]==syms[1] && syms[1]==0)
+        syms[1]=1;
+    for(var i=0;i<2;i++){
+        alg[i]=new algebra();
+            alg[i].coef[0]=new Fraction(nonZeroRand(1,9),1);
+        alg[i].terms[0]=new term();
+        for(var j=0;j<syms[i];j++)
+            alg[i].terms[0].addSymbol(randomArrayElement(pronumeral),new Fraction(randomLowInt(1,2)));
+    }
+    alg[2]=alg[0].mult(alg[0]);
+    alg[3]=alg[1].mult(alg[1]);
+    var qNum={
+        "a":alg[0].string(),
+        "b":alg[1].string(),
+        "aa":alg[2].string(),
+        "bb":alg[3].string(),        
+        "apb":alg[0].add(alg[1]).string(),
+        "amb":alg[0].sub(alg[1]).string(),
+        "exp":alg[2].sub(alg[3]).string(),
+        "$"     :   "`"
+    };
+        qNum['question']='<p>Factorise the following expression</p><p>[$][exp][$]</p>';
+        qNum['answer']='<p>[$][aa][$] is the square of [$][a][$]</p><p>[$][bb][$] is the square of [$][b][$]</p><p>Hence [$][exp]=([apb])([amb])[$]</p>';    
+            ]]>
+        </code>
+    </question>
+
+  
+    <question>
+        <category>Algebra</category>
+        <subcategory>Equations</subcategory>  
+        <title>Equations 1</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+var pronumeral=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+var x=new term();
+var one=new Fraction(1,1);
+var negOne=new Fraction(-1,1);
+x.addSymbol(randomArrayElement(pronumeral),one);
+var a=new Array();
+for(var i=0;i<4;i++){
+	a[i]=new algebra();
+	if(i==0){
+		a[i].terms[0]=x;
+		a[i].coef[0]=one;
+	}
+	else{
+		a[i].coef[0]=new Fraction(nonZeroRand(-9,9),1);
+		a[i].terms[0]=new term();
+	}
+}
+var qNum={
+		"$"     :   "`"
+};
+switch(randomInt(0,5)){
+	case 0:
+		while(a[1].coef[0].numerator==1)
+			a[1].coef[0]=new Fraction(nonZeroRand(-9,9),1);
+		qNum['equ']=a[0].mult(a[1]).add(a[2]).string()+'='+a[3].string();
+		if(a[2].coef[0].numerator>0)
+			qNum['first']='subtract '+a[2].string()+' from both sides';
+		else
+			qNum['first']='add '+Math.abs(a[2].coef[0].numerator)+' to both sides';
+		qNum['result1']=a[0].mult(a[1]).string()+'='+a[3].sub(a[2]).string();
+		qNum['second']='divide both sides by '+a[1].string();
+		qNum['result2']=a[0].string()+'='+a[3].coef[0].sub(a[2].coef[0]).div(a[1].coef[0]).string();
+		break;
+	case 1:
+		while(a[1].coef[0].numerator==1)
+			a[1].coef[0]=new Fraction(nonZeroRand(-9,9),1);
+		a[2].coef[0]=new Fraction(randomInt(1,9),1);
+		qNum['equ']=a[2].add(a[0].mult(a[1])).string()+'='+a[3].string();
+		if(a[2].coef[0].numerator>0)
+			qNum['first']='subtract '+a[2].string()+' from both sides';
+		else
+			qNum['first']='add '+Math.abs(a[2].coef[0].numerator)+' to both sides';
+		qNum['result1']=a[0].mult(a[1]).string()+'='+a[3].sub(a[2]).string();
+		qNum['second']='divide both sides by '+a[1].string();
+		qNum['result2']=a[0].string()+'='+a[3].coef[0].sub(a[2].coef[0]).div(a[1].coef[0]).string();
+		break;
+	case 2:
+		a[1].coef[0]=new Fraction(randomInt(2,9),1);
+		qNum['equ']=a[0].div(a[1]).add(a[2]).string()+'='+a[3].string();
+		if(a[2].coef[0].numerator>0)
+			qNum['first']='subtract '+a[2].string()+' from both sides';
+		else
+			qNum['first']='add '+Math.abs(a[2].coef[0].numerator)+' to both sides';
+		qNum['result1']=a[0].div(a[1]).string()+'='+a[3].sub(a[2]).string();
+		qNum['second']='multiply both sides by '+a[1].string();
+		qNum['result2']=a[0].string()+'='+a[3].sub(a[2]).mult(a[1]).string();
+		break;
+	case 3:
+		a[1].coef[0]=new Fraction(randomInt(2,9),1);
+		a[2].coef[0]=new Fraction(randomInt(1,9),1);
+		qNum['equ']=a[2].add(a[0].div(a[1])).string()+'='+a[3].string();
+		if(a[2].coef[0].numerator>0)
+			qNum['first']='subtract '+a[2].string()+' from both sides';
+		else
+			qNum['first']='add '+Math.abs(a[2].coef[0].numerator)+' to both sides';
+		qNum['result1']=a[0].div(a[1]).string()+'='+a[3].sub(a[2]).string();
+		qNum['second']='multiply both sides by '+a[1].string();
+		qNum['result2']=a[0].string()+'='+a[3].sub(a[2]).mult(a[1]).string();
+		break;
+	case 4:
+		a[2].coef[0]=new Fraction(randomInt(2,9),1);
+		qNum['equ']=a[0].add(a[1]).div(a[2]).string()+'='+a[3].string();
+		if(a[1].coef[0].numerator>0)
+			qNum['second']='subtract '+a[1].string()+' from both sides';
+		else
+			qNum['second']='add '+Math.abs(a[1].coef[0].numerator)+' to both sides';
+		qNum['result1']=a[0].add(a[1]).string()+'='+a[3].mult(a[2]).string();
+		qNum['first']='multiply both sides by '+a[2].string();
+		qNum['result2']=a[0].string()+'='+a[3].mult(a[2]).sub(a[1]).string();
+		break;
+	case 5:
+		a[1].coef[0]=new Fraction(randomInt(1,9),1);
+		a[2].coef[0]=new Fraction(randomInt(2,9),1);
+		qNum['equ']=a[1].add(a[0]).div(a[2]).string()+'='+a[3].string();
+		if(a[1].coef[0].numerator>0)
+			qNum['second']='subtract '+a[1].string()+' from both sides';
+		else
+			qNum['second']='add '+Math.abs(a[1].coef[0].numerator)+' to both sides';
+		qNum['result1']=a[1].add(a[0]).string()+'='+a[3].mult(a[2]).string();
+		qNum['first']='multiply both sides by '+a[2].string();
+		qNum['result2']=a[0].string()+'='+a[3].mult(a[2]).sub(a[1]).string();
+		break;
+}
+        qNum['question']='<p>Solve the following equation:</p><p>[$][equ][$]</p>';
+        qNum['answer']='<p>First we [first]</p><p>[$][result1][$]</p><p>then we [second]</p><p>[$][result2][$]</p>';
+			]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Algebra</category>
+        <subcategory>Equations</subcategory>  
+        <title>Equations 2</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+var pronumeral=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','p','q','r','s','t','u','v','w','x','y','z'];
+var x=new term();
+var one=new Fraction(1,1);
+var negOneF=new Fraction(-1,1);
+var negOne=new algebra();
+negOne.coef[0]=negOneF;
+negOne.terms[0]=new term();
+x.addSymbol(randomArrayElement(pronumeral),one);
+var a=new Array();
+for(var i=0;i<11;i++){
+	a[i]=new algebra();
+	if(i==0){
+		a[i].terms[0]=x;
+		a[i].coef[0]=one;
+	}
+	else{
+		a[i].terms[0]=new term();
+		if(i==3 || i==6)
+			a[i].coef[0]=new Fraction(nonZeroRand(-9,9),1);
+		else if(i==1 || i==4)
+			a[i].coef[0]=new Fraction(randomInt(2,9),1);
+		else if(i==2 || i==5)
+			a[i].coef[0]=new Fraction(randomInt(1,9),1);
+		else
+			a[i].coef[0]=new Fraction(1,1);
+	}
+}
+var qNum={  'exp'   :   'Expand brackets: &#160;&#160;&#160;&#160;',
+		'expand':   '',
+		'result3':  '',
+		"$"     :   "`"
+};
+var expand=true;
+switch(randomLowInt(0,3)){
+	case 0:
+		qNum['equ']=a[0].mult(a[2]).add(a[3]).string()+'='+a[0].mult(a[5]).add(a[6]).string();
+		a[7]=a[2];
+		a[8]=a[3];
+		a[9]=a[5];
+		a[10]=a[6];
+		qNum['exp']='';
+		expand=false;
+		break;
+	case 1:
+		qNum['equ']=a[1].string()+'('+a[0].mult(a[2]).add(a[3]).string()+')='+a[0].mult(a[5]).add(a[6]).string();
+		a[7]=a[1].mult(a[2]);
+		a[8]=a[1].mult(a[3]);
+		a[9]=a[5];
+		a[10]=a[6];
+		break;
+	case 2:
+		qNum['equ']=a[0].mult(a[2]).add(a[3]).string()+'='+a[4].string()+'('+a[0].mult(a[5]).add(a[6]).string()+')';
+		a[7]=a[2];
+		a[8]=a[3];
+		a[9]=a[4].mult(a[5]);
+		a[10]=a[4].mult(a[6]);
+		break;
+	case 3:
+		qNum['equ']=a[1].string()+'('+a[0].mult(a[2]).add(a[3]).string()+')='+a[4].string()+'('+a[0].mult(a[5]).add(a[6]).string()+')';
+		a[7]=a[1].mult(a[2]);
+		a[8]=a[1].mult(a[3]);
+		a[9]=a[4].mult(a[5]);
+		a[10]=a[4].mult(a[6]);
+		break;
+
+}
+if(expand)
+	qNum['expand']='`'+a[7].mult(a[0]).add(a[8]).string()+'='+a[0].mult(a[9]).add(a[10]).string()+'`';
+if(a[7].coef[0].numerator<a[9].coef[0].numerator && a[9].coef[0].numerator>0){
+	if(a[7].coef[0].numerator>0)
+		qNum['addsub1']='subtracting `'+a[0].mult(a[7]).string()+'` from';
+	else
+		qNum['addsub1']='adding `'+a[0].mult(a[7]).mult(negOne).string()+'` to';
+	qNum['result1']=a[8].string()+'='+a[0].mult(a[9]).add(a[10]).sub(a[7].mult(a[0])).string();
+	if(a[10].coef[0].numerator>0)
+		qNum['addsub2']='subtract `'+a[10].string()+'` from';
+	else
+		qNum['addsub2']='add `'+a[10].mult(negOne).string()+'` to';
+	qNum['result2']=a[8].sub(a[10]).string()+'='+a[0].mult(a[9]).sub(a[7].mult(a[0])).string();
+	qNum['div']='finally, divide by `'+a[9].sub(a[7]).string()+'`.';
+}
+else{
+	if(a[9].coef[0].numerator>0)
+		qNum['addsub1']='subtracting `'+a[0].mult(a[9]).string()+'` from';
+	else
+		qNum['addsub1']='adding `'+a[0].mult(a[9]).mult(negOne).string()+'` to';
+	qNum['result1']=a[7].mult(a[0]).add(a[8]).sub(a[0].mult(a[9])).string()+'='+a[10].string();
+	if(a[8].coef[0].numerator>0)
+		qNum['addsub2']='subtract `'+a[8].string()+'` from';
+	else
+		qNum['addsub2']='add `'+a[8].mult(negOne).string()+'` to';
+	qNum['result2']=a[7].mult(a[0]).sub(a[0].mult(a[9])).string()+'='+a[10].sub(a[8]).string();
+	qNum['div']='finally, divide by `'+a[7].sub(a[9]).string()+'`.';
+}
+if(qNum['div']=='finally, divide by `1`.')
+	qNum['div']='';
+else
+	qNum['result3']=a[0].string()+'='+a[8].sub(a[10]).coef[0].div(a[9].sub(a[7]).coef[0]).string();
+        qNum['question']='<p>Solve the following equation:</p><p>[$][equ][$]</p>';
+        qNum['answer']='<p>[exp] [expand]</p><p>gather like terms by [addsub1] both sides:<br>`[result1]`</p><p>now [addsub2] both sides <br>`[result2]`</p><p>[div]<br>`[result3]`</p>';        
+            ]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Algebra</category>
+        <subcategory>Equations</subcategory>  
+        <title>Equations 3</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+var pronumeral=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','p','q','r','s','t','u','v','w','x','y','z'];
+var x=new term();
+var one=new Fraction(1,1);
+var negOne=new algebra();
+negOne.coef[0]=new Fraction(-1,1);
+negOne.terms[0]=new term();
+var zero=new algebra();
+zero.coef[0]=new Fraction(0,1);
+zero.terms[0]=new term();
+x.addSymbol(randomArrayElement(pronumeral),one);
+var a=new Array();
+for(var i=0;i<10;i++){
+  a[i]=new algebra();
+  if(i==0){
+	a[i].terms[0]=x;
+	a[i].coef[0]=one;
+  }
+  else{
+	a[i].terms[0]=new term();
+	if(i==2 || i==4 || i==5)
+		a[i].coef[0]=new Fraction(nonZeroRand(-9,9),1);
+	else if(i==3)
+		a[i].coef[0]=new Fraction(randomInt(2,9),1);
+	else if(i==1)
+		a[i].coef[0]=new Fraction(randomInt(1,9),1);
+	else
+		a[i].coef[0]=one;
+  }
+}
+var qNum={  'exp'   :   'Expand brackets:&#160;&#160;&#160;&#160;',
+		'expand':   '',
+		'addsub1':  '',
+		'addsub2':  '',
+		'result1':  '',
+		'result2':  '',
+		'result3':  '',
+		"$"	 :   "`"	
+};
+var expand=true;
+switch(randomInt(0,6)){
+  case 0:
+	qNum['equ']=a[0].mult(a[1]).add(a[2]).div(a[3]).string()+'='+a[5].string();
+	qNum['mult']=a[3].string();
+	expand=false;
+	qNum['factor']='`'+a[0].mult(a[1]).add(a[2]).string()+'='+a[5].mult(a[3]).string()+'`';
+	a[6]=a[1];
+	a[7]=a[2];
+	a[8]=zero;
+	a[9]=a[5].mult(a[3]);
+	break;
+  case 1:
+	qNum['equ']=a[2].div(a[0].mult(a[3]).add(a[4])).string()+'='+a[5].string();
+	qNum['mult']='('+a[0].mult(a[3]).add(a[4]).string()+')';
+	qNum['factor']='`'+a[2].string()+'='+a[5].string()+'('+a[0].mult(a[3]).add(a[4]).string()+')`';
+	a[6]=zero;
+	a[7]=a[2];
+	a[8]=a[5].mult(a[3]);
+	a[9]=a[5].mult(a[4]);
+	break;
+  case 2:
+	qNum['equ']=a[0].mult(a[1]).add(a[2]).div(a[0].mult(a[3]).add(a[4])).string()+'='+a[5].string();
+	qNum['mult']='('+a[0].mult(a[3]).add(a[4]).string()+')';
+	qNum['factor']='`'+a[0].mult(a[1]).add(a[2]).string()+'='+a[5].string()+'('+a[0].mult(a[3]).add(a[4]).string()+')`';
+	a[6]=a[1];
+	a[7]=a[2];
+	a[8]=a[5].mult(a[3]);
+	a[9]=a[5].mult(a[4]);
+	break;
+  case 3:
+	qNum['equ']=a[0].mult(a[1]).div(a[0].mult(a[3]).add(a[4])).string()+'='+a[5].string();
+	qNum['mult']='('+a[0].mult(a[3]).add(a[4]).string()+')';
+	qNum['factor']='`'+a[0].mult(a[1]).string()+'='+a[5].string()+'('+a[0].mult(a[3]).add(a[4]).string()+')`';
+	a[6]=a[1];
+	a[7]=zero;
+	a[8]=a[5].mult(a[3]);
+	a[9]=a[5].mult(a[4]);
+	break;
+  case 4:
+	qNum['equ']=a[0].mult(a[1]).add(a[2]).div(a[0].mult(a[3])).string()+'='+a[5].string();
+	qNum['mult']=a[0].mult(a[3]).string();
+	expand=false;
+	qNum['factor']='`'+a[0].mult(a[1]).add(a[2]).string()+'='+a[5].mult(a[0]).mult(a[3]).string()+'`';
+	a[6]=a[1];
+	a[7]=a[2];
+	a[8]=a[5].mult(a[3]);
+	a[9]=zero;
+	break;
+  case 5:
+	qNum['equ']=a[0].mult(a[1]).add(a[2]).div(a[3]).string()+'='+a[0].mult(a[4]).add(a[5]).string();
+	qNum['mult']=a[3].string();
+	qNum['factor']='`'+a[0].mult(a[1]).add(a[2]).string()+'='+a[3].string()+'('+a[0].mult(a[4]).add(a[5]).string()+')`';
+	a[6]=a[1];
+	a[7]=a[2];
+	a[8]=a[3].mult(a[4]);
+	a[9]=a[3].mult(a[5]);
+	break;
+  case 6:
+	qNum['equ']=a[0].mult(a[1]).add(a[2]).div(a[3]).string()+'='+a[0].mult(a[4]).string();
+	qNum['mult']=a[3].string();
+	expand=false;
+	qNum['factor']='`'+a[0].mult(a[1]).add(a[2]).string()+'='+a[3].mult(a[0]).mult(a[4]).string()+'`';
+	a[6]=a[1];
+	a[7]=a[2];
+	a[8]=a[3].mult(a[4]);
+	a[9]=zero;
+	break;
+}
+if(expand)
+	qNum['expand']='`'+a[6].mult(a[0]).add(a[7]).string()+'='+a[0].mult(a[8]).add(a[9]).string()+'`';
+else
+	qNum['exp']='';
+if(a[6].coef[0].numerator<a[8].coef[0].numerator || a[6].coef[0].numerator==0){	 
+  if(a[6].coef[0].numerator){
+	if(a[6].coef[0].numerator>0)
+		qNum['addsub1']='subtract `'+a[0].mult(a[6]).string()+'` from both sides:&#160;&#160;&#160;&#160;';
+	else
+		qNum['addsub1']='add `'+a[0].mult(a[6]).mult(negOne).string()+'` to both sides:&#160;&#160;&#160;&#160;';
+	qNum['result1']='`'+a[7].string()+'='+a[0].mult(a[8]).add(a[9]).sub(a[6].mult(a[0])).string()+'`';
+  }
+  if(a[9].coef[0].numerator){
+	if(a[9].coef[0].numerator>0)
+		qNum['addsub2']='subtract `'+a[9].string()+'` from both sides:&#160;&#160;&#160;&#160;';
+	else
+		qNum['addsub2']='add `'+a[9].mult(negOne).string()+'` to both sides:&#160;&#160;&#160;&#160;';
+	qNum['result2']=a[7].sub(a[9]).string()+'='+a[0].mult(a[8]).sub(a[6].mult(a[0])).string();
+  }
+  qNum['div']='finally, divide by `'+a[8].sub(a[6]).string()+'`';						
+}
+else{
+  if(a[8].coef[0].numerator){
+	if(a[8].coef[0].numerator>0)
+		qNum['addsub1']='subtract `'+a[0].mult(a[8]).string()+'` from both sides:&#160;&#160;&#160;&#160;';
+	else
+		qNum['addsub1']='add `'+a[0].mult(a[8]).mult(negOne).string()+'` to both sides:&#160;&#160;&#160;&#160;';
+	qNum['result1']='`'+a[6].mult(a[0]).add(a[7]).sub(a[0].mult(a[8])).string()+'='+a[9].string()+'`';
+  }
+  if(a[7].coef[0].numerator){
+	if(a[7].coef[0].numerator>0)
+		qNum['addsub2']='subtract `'+a[7].string()+'` from both sides:&#160;&#160;&#160;&#160;';
+	else
+		qNum['addsub2']='add `'+a[7].mult(negOne).string()+'` to both sides:&#160;&#160;&#160;&#160;';
+	qNum['result2']=a[6].mult(a[0]).sub(a[0].mult(a[8])).string()+'='+a[9].sub(a[7]).string();
+  }
+  qNum['div']='finally, divide by `'+a[6].sub(a[8]).string()+'`';
+}
+if(qNum['div']=='finally, divide by `1`')
+	qNum['div']='';
+else
+	qNum['result3']=a[0].string()+'='+a[7].sub(a[9]).coef[0].div(a[8].sub(a[6]).coef[0]).string();
+        qNum['question']='<p>Solve the following equation:</p><p>[$][equ][$]</p>';
+        qNum['answer']='</p>Multiply both sides by `[mult]`<br/>[factor]</p><p>[exp] [expand]</p><p>[addsub1][result1]</p><p>[addsub2]`[result2]`</p><p>[div]<br/>`[result3]`</p>';        
+			]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Algebra</category>
+        <subcategory>Equations</subcategory>  
+        <title>Equations 4</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+var pronumeral=['a','b','c','d','e','f','g','h','j','k','m','n','p','q','r','s','t','u','v','w','x','y','z'];
+var x=new term();
+var one=new Fraction(1,1);
+x.addSymbol(randomArrayElement(pronumeral),one);
+var negOneF=new Fraction(-1,1);
+var negOne=new algebra();
+negOne.coef[0]=negOneF;
+negOne.terms[0]=new term();
+var a=new Array();
+var intSol=new Fraction(1,1);
+var pow=new Fraction(1,1);
+if(randomInt(0,1)){
+	pow.numerator=randomInt(2,5);
+	intSol.numerator=Math.pow(randomInt(1,4),pow.numerator);
+}
+else{
+	pow.denominator=randomInt(2,5);
+	intSol.numerator=randomInt(1,4);
+}
+for(var i=0;i<6;i++){
+	a[i]=new algebra();
+	if(i==0){
+		a[i].terms[0]=x;
+		a[i].coef[0]=one;
+	}
+	else{
+		a[i].terms[0]=new term();
+		if(i==3 || i==4){
+			if(randomInt(0,1))
+				a[i].coef[0]=new Fraction(randomInt(-9,9),1);
+			else
+				a[i].coef[0]=new Fraction(0,1);
+		}
+		else {
+			if((i==1 || i==2) && randomInt(0,1))
+				a[i].coef[0]=new Fraction(randomInt(1,9),1);
+			else
+				a[i].coef[0]=new Fraction(1,1);
+		}
+	}
+}
+a[5].coef[0]=a[1].coef[0].mult(intSol).add(a[4].coef[0]);
+a[6]=new algebra();
+a[6].copy(a[1]);
+if(a[2].coef[0].numerator!=1 || a[3].coef[0].numerator)
+	a[6].terms[0].addSymbol(a[0].mult(a[2]).add(a[3]),pow);
+else{
+	a[6].terms[0].addSymbol(a[0].terms[0].symbol[0],pow);
+}
+a[6]=a[6].add(a[4]);
+var qNum={  'equ'   :   a[6].string()+'='+a[5].string(),
+		'STEP1' :   '',
+		'STEP2' :   '',
+		'STEP3' :   '',
+		'STEP4' :   '',
+		'STEP5' :   '',
+		"$"     :   "`"
+};
+var action='';
+if(a[4].coef[0].numerator){
+	action='subtract '+a[4].string()+' from';
+	if(a[4].coef[0].numerator<0)
+		action='add '+a[4].mult(negOne).string()+' to';
+	qNum['STEP1']=action+' both sides <span style="float:right">`'+a[6].sub(a[4]).string()+'='+a[5].sub(a[4]).string()+'`</span>';
+}
+if(a[1].coef[0].numerator!=1){
+	var da1=new algebra();
+	da1.coef[0]=new Fraction(a[1].coef[0].denominator,a[1].coef[0].numerator);
+	da1.terms[0]=new term();
+	qNum['STEP2']='Divide both sides by '+a[1].string()+'<span style="float:right">`'+a[6].sub(a[4]).mult(da1).string()+'='+a[5].sub(a[4]).coef[0].div(a[1].coef[0]).string()+'`</span>';
+}
+var pm=false;
+if(pow.numerator>pow.denominator){
+	if(pow.numerator!=2)
+		if(pow.numerator!=4)
+			qNum['STEP3']='Take `root '+pow.numerator+' ` of both sides'
+		else{
+			qNum['STEP3']='Take `+-root '+pow.numerator+' ` of both sides'
+			pm=true;
+		}
+	else{
+		qNum['STEP3']='Take `+-sqrt ` of both sides'
+		pm=true;
+	}
+}
+else{
+	qNum['STEP3']='Raise both sides to power of '+pow.denominator;
+}
+var res1=new Fraction(1,1);
+var res2=new Fraction(1,1);
+res1=a[5].sub(a[4]).coef[0].div(a[1].coef[0]).pow(pow.denominator/pow.numerator);
+qNum['STEP3']+='<span style="float:right">`'+a[0].mult(a[2]).add(a[3]).string()+'='+res1.string();
+if(a[3].coef[0].numerator){
+	action='subtract '+a[3].string()+' from';
+	if(a[3].coef[0].numerator<0)
+		action='add '+a[3].mult(negOne).string()+' to';
+	qNum['STEP4']=action+' both sides<span style="float:right">`'+a[0].mult(a[2]).string()+'='+res1.sub(a[3].coef[0]).string();
+}
+if(a[2].coef[0].numerator!=1){
+	qNum['STEP5']='Divide both sides by '+a[2].string()+'<span style="float:right">`'+a[0].string()+'='+res1.sub(a[3].coef[0]).div(a[2].coef[0]).string();
+}
+if(pm){
+	res2=a[5].sub(a[4]).coef[0].div(a[1].coef[0]).pow(pow.denominator/pow.numerator).mult(negOneF);
+	qNum['STEP3']+='`&#160;&#160; or &#160;&#160;`'+res2.string();
+	if(qNum['STEP4'])qNum['STEP4']+='`&#160;&#160; or &#160;&#160;`'+res2.sub(a[3].coef[0]).string();
+	if(qNum['STEP5'])qNum['STEP5']+='`&#160;&#160; or &#160;&#160;`'+res2.sub(a[3].coef[0]).div(a[2].coef[0]).string();
+}
+qNum['STEP3']+='`</span>';
+if(qNum['STEP4'])qNum['STEP4']+='`</span>';
+if(qNum['STEP5'])qNum['STEP5']+='`</span>';
+        qNum['question']='<p>Solve the following equation:</p><p>[$][equ][$]</p>';
+        qNum['answer']='<p>[STEP1]</p><p>[STEP2]</p><p>[STEP3]</p><p>[STEP4]</p><p>[STEP5]</p>';
+			]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Algebra</category>
+        <subcategory>Equations</subcategory>  
+        <title>Equations 5</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+var pronumeral=['a','b','c','d','e','f','g','h','j','k','m','n','p','q','r','s','t','u','v','w','x','y','z'];
+var x=new term();
+var one=new Fraction(1,1);
+x.addSymbol(randomArrayElement(pronumeral),one);
+var negOneF=new Fraction(-1,1);
+var negOne=new algebra();
+negOne.coef[0]=negOneF;
+negOne.terms[0]=new term();
+var a=new Array();
+for(var i=0;i<8;i++){
+	a[i]=new algebra();
+	if(i==0){
+		a[i].terms[0]=x;
+		a[i].coef[0]=one;
+	}
+	else{
+		a[i].terms[0]=new term();
+		if(i==2 || i==5 || i==7){
+			if(randomInt(0,1) || i==7)
+				a[i].coef[0]=new Fraction(randomInt(-9,9),1);
+			else
+				a[i].coef[0]=new Fraction(0,1);
+		}
+		else if(i==1 || i==4)
+			a[i].coef[0]=new Fraction(randomInt(1,9),1);
+		else if(i==3 || i==6)
+			do{
+				a[i].coef[0]=new Fraction(randomInt(2,9),1);
+			}
+			while(i==6 && gcd(a[3].coef[0].numerator,a[6].coef[0].numerator)==Math.min(a[3].coef[0].numerator,a[6].coef[0].numerator));
+		else
+			a[i].coef[0]=new Fraction(1,1);
+	}
+}
+var g=gcd(a[3].coef[0].numerator,a[6].coef[0].numerator);
+if(g!=1){
+	a[3].coef[0].numerator/=g;
+	a[6].coef[0].numerator/=g;
+}
+var a10string='';
+var a10stringy='';
+if(randomInt(0,1)){
+	a[8]=a[0].mult(a[1]).add(a[2]).div(a[3]).add(a[0].mult(a[4]).add(a[5]).div(a[6]));
+	a[9]=a[0].mult(a[1]).add(a[2]).add(a[3].mult(a[0].mult(a[4]).add(a[5]).div(a[6])));
+	a10string=a[6].string()+'('+a[0].mult(a[1]).add(a[2]).string()+')+'+a[3].string()+'('+a[0].mult(a[4]).add(a[5]).string()+')';
+	a10stringy=a[6].mult(a[0].mult(a[1]).add(a[2])).string()+'+'+(a[3].mult(a[0].mult(a[4]).add(a[5]))).string();
+	a[10]=a[6].mult(a[0].mult(a[1]).add(a[2])).add(a[3].mult(a[0].mult(a[4]).add(a[5])));
+}
+else{
+	a[8]=a[0].mult(a[1]).add(a[2]).div(a[3]).sub(a[0].mult(a[4]).sub(a[5]).div(a[6]));
+	a[9]=a[0].mult(a[1]).add(a[2]).sub(a[3].mult(a[0].mult(a[4]).add(a[5]).div(a[6])));
+	a10string=a[6].string()+'('+a[0].mult(a[1]).add(a[2]).string()+')-'+a[3].string()+'('+a[0].mult(a[4]).add(a[5]).string()+')';
+	a10stringy=a[6].mult(a[0].mult(a[1]).add(a[2])).string()+'-'+(a[3].mult(a[0].mult(a[4]).add(a[5]))).string();
+	a[10]=a[6].mult(a[0].mult(a[1]).add(a[2])).sub(a[3].mult(a[0].mult(a[4]).add(a[5])));
+}
+a[11]=a[7].mult(a[3]).mult(a[6]);
+var qNum={  'equ'   :   a[8].string()+'='+a[7].string(),
+		'STEP1' :   'Multiply both sides by `'+a[3].string()+'`<span style="float:right">`'+a[9].string()+'='+a[7].mult(a[3]).string()+'`</span>',
+		'STEP2' :   'Multiply both sides by `'+a[6].string()+'`<span style="float:right">`'+a10string+'='+a[11].string()+'`</span>',
+		'STEP3' :   'Expand brackets <span style="float:right">`'+a10stringy+'='+a[11].string()+'`</span>',
+		'STEP4' :   'Gather like terms <span style="float:right">`'+a[10].string()+'='+a[11].string()+'`</span>',
+		'STEP5' :   '',
+		'STEP6' :   '',
+		"$"     :   "`"
+};
+if(a[10].coef.length>1){
+	if(a[10].coef[1].numerator>0)
+		qNum['STEP5']='Subtract '+a[10].coef[1].string()+' from both sides <span style="float:right">`';
+	else
+		qNum['STEP5']='Add '+a[10].coef[1].mult(negOneF).string()+' to both sides <span style="float:right">`';
+	var t=new algebra();
+	t.coef[0]=a[10].coef[1];
+	t.terms[0]=new term();
+	a[11]=a[11].sub(t);
+	qNum['STEP5']+=a[10].sub(t).string()+'='+a[11].string()+'`</span>';
+}
+if(a[10].coef[0].numerator!=1)
+	qNum['STEP6']='Divide both sides by '+a[10].coef[0].string()+'<span style="float:right">`'+a[0].string()+'='+a[11].coef[0].div(a[10].coef[0]).string()+'`</span>';
+        qNum['question']='<p>Solve the following equation:</p><p>[$][equ][$]</p>';
+        qNum['answer']='<div style="width:300px;"><p style="margin: 0 0 1.5em 0;">[STEP1]</p><p>[STEP2]</p><p>[STEP3]</p><p>[STEP4]</p><p>[STEP5]</p><p>[STEP6]</p>';        
+			]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Algebra</category>
+        <subcategory>Simultaneous Equations</subcategory>  
+        <title>Substitution Method</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+          do{
+          var coefficients = [nonZeroRand(-9, 9), nonZeroRand(-9, 9),0, nonZeroRand(-9, 9), nonZeroRand(-9, 9), 0];
+    //choosing nicer variables
+    var den = randomLowInt(1, 9);
+    var ansX = nonZeroRand(-9, 9);
+    var ansY = nonZeroRand(-9, 9);
+    var xr = ansX % den;
+    var yr = ansY % den;
+    for (var i = 0; i < 2; i++) {
+        var point=i*3+1;
+        var count=0;
+        while ((coefficients[i*3] * xr + coefficients[i*3+1] * yr) % den != 0) {
+            count++;
+            coefficients[point] = nonZeroRand(-9, 9);
+            if (count % 10 == 0)
+                point = (point==i*3) ? i*3+1 : i*3;
+        }
+    }
+    coefficients[2]=(coefficients[0]*ansX+coefficients[1]*ansY)/den;
+    coefficients[5]=(coefficients[3]*ansX+coefficients[4]*ansY)/den;
+    }while(coefficients[0]*coefficients[4]-coefficients[1]*coefficients[3]==0)
+    var a, b, c, d, e, f, target = -1, z;
+    if (Math.abs(coefficients[0]) == 1)
+        target = 0;
+    else if (Math.abs(coefficients[1]) == 1)
+        target = 1;
+    else if (Math.abs(coefficients[3]) == 1)
+        target = 3;
+    else if (Math.abs(coefficients[4]) == 1)
+        target = 4;
+    else
+        target = randomArrayElement([0, 1, 3, 4]);
+    switch (target) {
+        case 0:
+            a = coefficients[0];
+            b = coefficients[1];
+            c = coefficients[2];
+            d = coefficients[3];
+            e = coefficients[4];
+            f = coefficients[5];
+            z = 'x';
+            break;
+        case 1:
+            a = coefficients[1];
+            b = coefficients[0];
+            c = coefficients[2];
+            d = coefficients[4];
+            e = coefficients[3];
+            f = coefficients[5];
+            z = 'y';
+            break;
+        case 3:
+            a = coefficients[3];
+            b = coefficients[4];
+            c = coefficients[5];
+            d = coefficients[0];
+            e = coefficients[1];
+            f = coefficients[2];
+            z = 'x';
+            break;
+        case 4:
+            a = coefficients[4];
+            b = coefficients[3];
+            c = coefficients[5];
+            d = coefficients[1];
+            e = coefficients[0];
+            f = coefficients[2];
+            z = 'y';
+            break;
+    }
+    var z2 = (z == 'x') ? 'y' : 'x';
+    var one =new Fraction(1,1);
+    var A=new algebra();
+    A.coef[0]=new Fraction(a,1);
+    var B=new algebra();
+    B.coef[0]=new Fraction(b,1);
+    B.terms[0].addSymbol(z2,one);
+    var C=new algebra();
+    C.coef[0]=new Fraction(c,1);
+    var D=new algebra();
+    D.coef[0]=new Fraction(d,1);
+    var E=new algebra();
+    E.coef[0]=new Fraction(e,1);
+    E.terms[0].addSymbol(z2,one);
+    var F=new algebra();
+    F.coef[0]=new Fraction(f,1);
+    var w = new Array();
+    if(Math.abs(a)==1)
+        w[0]=C.sub(B).mult(a);
+    else
+        w[0]=C.sub(B).div(A);
+    w[2]=new algebra();
+    if(target==0||target==3){
+        w[1]=D.mult(w[0]).add(E);
+        w[2].coef[0]=new Fraction(d,1);
+        w[2].terms[0].addSymbol(C.sub(B),one);
+        w[2]=w[2].add(E.mult(A));
+        w[3]=D.mult(C.sub(B));
+        w[3].terms[2]=new term();
+        w[3].coef[2]=w[2].coef[1];
+        w[3].terms[2]=w[2].terms[1];
+        w[4]=D.mult(C.sub(B)).add(E.mult(A));
+    }else{
+        w[1]=E.add(D.mult(w[0]));
+        w[2]=E.mult(A);
+        w[2].coef[1]=new Fraction(d,1);
+        w[2].terms[1]=new term();
+        w[2].terms[1].addSymbol(C.sub(B),one);
+        w[3]=E.mult(A).add(D.mult(C));
+        w[3].terms[2]=new term();
+        w[3].coef[2]=D.mult(B).mult(-1).coef[0];
+        w[3].terms[2]=D.mult(B).mult(-1).terms[0];
+        w[4]=E.mult(A).add(D.mult(C.sub(B)));
+    }    
+    w[5]=w[4].sub(D.mult(C));
+    var s2=new Fraction(f*a-d*c,a*e-b*d)
+    var S1=new algebra(), S2=new algebra;
+    S1.coef[0]=s2.mult(B.coef[0]);
+    S2.coef[0]=s2;
+    w[6]=C.sub(S1).coef[0].div(A.coef[0]);    
+    w[7]=C.sub(B);
+    w[7].terms[1]=new term();
+    w[7].terms[1].addSymbol(S2,one);
+    if(Math.abs(a)==1)
+        w[7]=w[7].mult(a);
+    else
+        w[7]=w[7].div(A);
+    var qNum={
+        "a": coefficients[0],
+        "b": coefficients[1],
+        "c": coefficients[2],
+        "d": coefficients[3],
+        "e": coefficients[4],
+        "f": coefficients[5],
+        "fa":c*a,
+        "z": z,
+        "z2": z2,
+        "s1":w[6].string(),
+        "s2": s2.string(),
+        "e1": '(1)',
+        "e2": '(2)',
+        "sub": w[0].string(),
+        "working1":  '<p>[$]'+w[1].string() + '='+f+'[$]</p>',
+        "working2": '<p>[$]' +w[2].string() + '='+(f*a)+'[$]</p>',
+        "working3": w[3].string()+'='+(f*a),
+        "working4":w[4].string()+'='+(f*a),
+        "working5":w[5].string()+'='+(f*a-d*c),
+        "working6": w[7].string()+'=[s1]' ,
+        "$": "`"
+    };
+    if (target == 3 || target == 4) {
+        qNum['e1'] = '(2)';
+        qNum['e2'] = '(1)';
+    }
+    if(Math.abs(a)==1){
+        qNum['working1']=qNum['working2'];
+        qNum['working2']='';
+    }
+        qNum['question']='<p>Solve these simultaneous equations <u>using the substitution method</u>.</p><p>[$][!a][x][+!b][y]=[c][$] &nbsp;-&nbsp;-&nbsp;-&nbsp; (1)</p><p>[$][!d][x][+!e][y]=[f][$] &nbsp;-&nbsp;-&nbsp;-&nbsp; (2)</p>';
+        qNum['answer']='<p>Make [$][z][$] the subject of equation [e1]:</p><p>[$][z]=[sub][$] &nbsp;-&nbsp;-&nbsp;-&nbsp; (3)</p><p>Now substitute this into equation [e2]:</p>[?working1]<p>Now solve to get value of [$][z2][$]</p>[?working2]<p>[$][?working3][$]</p><p>[$][working4][$]</p><p>[$][working5][$]</p><p>[$][z2]=[s2][$]</p><p>Now substitute [$][z2]=[s2][$] into (3) to get the value of [$][z][$]</p><p>[$][z]=[sub]=[?working6][$]</p>';    
+			]]>
+        </code>
+    </question>
+
+    <question>
+        <category>Algebra</category>
+        <subcategory>Simultaneous Equations</subcategory>  
+        <title>Elimination Method</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+    var one = new Fraction(1, 1);
+    var Cf = new Array(), CfSyms = ['x', 'y', ''], A = [nonZeroRand(-9, 9), nonZeroRand(-9, 9),0, nonZeroRand(-9, 9), nonZeroRand(-9, 9), 0];
+    //choosing nicer variables
+    var den = randomLowInt(1, 9);
+    var ansX = nonZeroRand(-9, 9);
+    var ansY = nonZeroRand(-9, 9);
+    var xr = ansX % den;
+    var yr = ansY % den;
+    for (var i = 0; i < 2; i++) {
+        var point=i*3+1;
+        var count=0;
+        while ((A[i*3] * xr + A[i*3+1] * yr) % den != 0) {
+            count++;
+            A[point] = nonZeroRand(-9, 9);
+            if (count % 10 == 0)
+                point = (point==i*3) ? i*3+1 : i*3;
+        }
+    }
+    A[2]=(A[0]*ansX+A[1]*ansY)/den;
+    A[5]=(A[3]*ansX+A[4]*ansY)/den;
+    for (var i = 0; i < 6; i++) {
+        Cf[i] = new algebra();
+        Cf[i].terms[0].addSymbol(CfSyms[i % 3], one);
+        Cf[i].coef[0]=new Fraction(A[i],1);
+    }
+    Cf[6] = Cf[0].add(Cf[1]);
+    Cf[7] = Cf[3].add(Cf[4]);
+    var a = Cf[0].coef[0].numerator;
+    var b = Cf[1].coef[0].numerator;
+    var c = Cf[2].coef[0].numerator;
+    var d = Cf[3].coef[0].numerator;
+    var e = Cf[4].coef[0].numerator;
+    var f = Cf[5].coef[0].numerator;
+    var LCM1 = lcm(a, d);
+    var LCM2 = lcm(b, e);
+    var ths, tht, itisX, itisEq1;
+    if (Math.abs(LCM1) <= Math.abs(LCM2)) {
+        ths = LCM1 / a;
+        tht = LCM1 / d;
+        Cf[8] = Cf[6].mult(ths);
+        Cf[9] = Cf[7].mult(tht);
+        itisX = false;
+        if (Math.abs(b) <= Math.abs(e))
+            itisEq1 = true;
+        else
+            itisEq1 = false;
+    } else {
+        ths = LCM2 / b;
+        tht = LCM2 / e;
+        Cf[8] = Cf[6].mult(ths);
+        Cf[9] = Cf[7].mult(tht);
+        itisX = true;
+        if (Math.abs(a) <= Math.abs(d))
+            itisEq1 = true;
+        else
+            itisEq1 = false;
+
+    }
+    Cf[10] = new algebra();
+    Cf[10].coef[0] = one;
+    Cf[10].coef[1] = new Fraction(-1, 1);
+    Cf[10].terms[0].addSymbol(Cf[8], one);
+    Cf[10].terms[1] = new term();
+    Cf[10].terms[1].addSymbol(Cf[9], one);
+    Cf[11] = new algebra();
+    Cf[11].coef[0] = one;
+    Cf[11].terms[0].addSymbol(Cf[8], one);
+    Cf[11] = Cf[11].sub(Cf[3].mult(tht));
+    Cf[11].coef[2] = Cf[4].mult(-tht).coef[0];
+    Cf[11].terms[2] = new term();
+    Cf[11].terms[2].addSymbol('y', one);
+    var S1 = new algebra();
+    S1.coef[0] = new Fraction(c * ths - f * tht, Cf[8].sub(Cf[9]).coef[0].numerator);
+    Cf[12] = new algebra();
+    if (itisEq1)
+        Cf[12].copy(Cf[6]);
+    else
+        Cf[12].copy(Cf[7]);
+    if (itisX)
+        Cf[12].terms[0].symbol[0] = S1;
+    else
+        Cf[12].terms[1].symbol[0] = S1;
+    Cf[13] = new algebra();
+    var target = (itisX) ? '0' : '1';
+    Cf[13].copy(Cf[12]);
+    Cf[13].terms[target] = new term();
+    Cf[13].coef[target] = Cf[13].coef[target].mult(S1.coef[0]);
+    Cf[14] = Cf[13].sub(S1.mult(Cf[12].coef[target].numerator));
+    var S = new Fraction((itisEq1) ? c : f, 1);
+    S = S.sub(S1.coef[0].mult(Cf[12].coef[target]));
+    var S2 = S.div(Cf[14].coef[0]);
+    var qNum={
+        "axby": Cf[6].string(),
+        "c": Cf[2].string(),
+        "dxey": Cf[7].string(),
+        "f": Cf[5].string(),
+        "this": ths,
+        "that": tht,
+        "multEq1": '<p>Multiply equation (1) by [this] [?and]</p><p>[$]' + Cf[8].string() + '=' + (c * ths) + '[$]&nbsp;-&nbsp;-&nbsp;-&nbsp; (3)</p>',
+        "and": 'and multiply equation (2) by [that]',
+        "multEq2": '<p>[$]' + Cf[9].string() + '=' + (f * tht) + '[$]&nbsp;-&nbsp;-&nbsp;-&nbsp; (4)</p>',
+        "one": '(3)',
+        "two": '(4)',
+        "working1": Cf[10].string() + '=' + (c * ths) + '-' + (f * tht),
+        "working2": Cf[11].string() + '=' + (c * ths - f * tht),
+        "working3": Cf[8].sub(Cf[9]).string() + '=' + (c * ths - f * tht),
+        "solutions": '<p>Hence [$][z1]=[s1][$], now find value of [$][z2][$] using equation [eq]</p><p>[$][working4][$]</p><p>[$][working5][$]</p><p>[$][?working6][$]</p><p>[$][z2]=[s2][$]</p>',
+        "z1": (itisX) ? 'x' : 'y',
+        "z2": (itisX) ? 'y' : 'x',
+        "s1": S1.string(),
+        "eq": (itisEq1) ? '(1)' : '(2)',
+        "working4": Cf[12].string() + '=' + ((itisEq1) ? c : f),
+        "working5": Cf[13].string() + '=' + ((itisEq1) ? c : f),
+        "working6": Cf[14].string() + '=' + ((itisEq1) ? c : f) + '[p]' + S1.mult(Cf[12].coef[target].numerator).mult(-1).string() + '=' + S.string(),
+        "p": '+',
+        "s2": S2.string(),
+        "$": "`"
+    }
+    if (S1.mult(Cf[12].coef[target].numerator).coef[0].decimal() > 0)
+        qNum['p'] = '';
+    if (ths == 1) {
+        qNum['one'] = '(1)';
+        qNum['two'] = '(3)';
+        qNum['multEq1'] = '<p>Multiply equation (2) by [that]</p><p>[$]' + Cf[9].string() + '=' + (f * tht) + '[$]&nbsp;-&nbsp;-&nbsp;-&nbsp; (3)</p>'
+        qNum['multEq2'] = '';
+    }
+    if (tht == 1) {
+        qNum['two'] = '(2)';
+        qNum['and'] = '';
+        qNum['multEq2'] = '';
+    }
+    if (ths == 1 && tht == 1) {
+        qNum['multEq1'] = '';
+    }
+    if (S1.coef[0].numerator == 0)
+        qNum['solutions'] = 'It is not possible to find a single solution to these equations.';
+        qNum['question']='<p>Solve these simultaneous equations <u>using the elimination method</u>.</p><p>[$][axby]=[c][$] &nbsp;-&nbsp;-&nbsp;-&nbsp; (1)</p><p>[$][dxey]=[f][$] &nbsp;-&nbsp;-&nbsp;-&nbsp; (2)</p>';
+        qNum['answer']='[?multEq1][?multEq2]<p>subtract equation [two] from equation [one]</p><p>[$][working1][$]</p><p>[$][working2][$]</p><p>[$][?working3][$]</p><p>Hence [$][z1]=[s1][$], now find value of [$][z2][$] using equation [eq]</p><p>[$][working4][$]</p><p>[$][working5][$]</p><p>[$][?working6][$]</p><p>[$][z2]=[s2][$]</p>';        
+			]]>
+        </code>
+    </question>
+
+  
+    <question>
+        <category>Algebra</category>
+        <subcategory>Logarithms</subcategory>  
+        <title>Logarithms 1</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+            var qNum={  'a' :   randomInt(2,12),
+                    "$" :   "`"
+            };
+            qNum['x']=randomInt(0, Math.floor(4*Math.log(10)/Math.log(qNum['a'])));
+            qNum['y']=Math.pow(qNum['a'],qNum['x']);
+            if(randomInt(0,3)==0){
+                qNum['x']*=-1;
+                var y=new Fraction(1,qNum['y']);
+                qNum['y']=y.string();
+            }
+        qNum['question']='<p>What is the value of [$]log_[a]([y])[$] ?</p><p>Answer without using the LOG button on your calculator.</p>';
+        qNum['answer']='<p>`log_[a]([y])=[x]`</p><p>because</p><p>`[a]^[x]=[y]`</p>';            
+			]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Algebra</category>
+        <subcategory>Logarithms</subcategory>  
+        <title>Logarithms 2</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+            var qNum={  'a' :   randomInt(2,12),
+                    'y' :   randomLowInt(2,1000),
+                    "$" :   "`"
+            };
+            while(qNum['a']==10)
+                qNum['a']=randomInt(2,12);
+            var x=Math.log(qNum['y'])/Math.log(qNum['a']);
+            qNum['x']=Math.round(x*100000)/100000+'(5dp)';
+        qNum['question']='<p>Use the <span style="border: 1px solid;">LOG</span> or <span style="border: 1px solid;">ln</span> buttons on you calculator to evaluate:</p><p>[$]log_[a]([y])[$]</p><p>correct to 5dp.</p>';
+        qNum['answer']='<p>Using the change of base rule:</p><p>[$]log_[a]([y])=(log_(10)([y]))/(log_(10)([a]))[$] <span style="float: right;"> or&#160;&#160;[$](ln([y]))/(ln([a]))[$]</span></p><p>[$]=[x][$]</p><p>On the calculator, type:</p><p><span style="border: 1px solid;">LOG</span>[y]<span style="border: 1px solid;">`-:`</span> <span style="border: 1px solid;">LOG</span> [a] <span style="border: 1px solid;">=</span> <span style="float: right">or&#160;&#160;&#160;&#160;<span style="border: 1px solid;">ln</span>[y]<span style="border: 1px solid;">`-:`</span> <span style="border: 1px solid;">ln</span> [a] <span style="border: 1px solid;">=</span></span></p>';            
+			]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Algebra</category>
+        <subcategory>Logarithms</subcategory>  
+        <title>Logarithms 3</title>
+        <suitable>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+            var qNum={  'a' :   randomLowInt(2,99),
+                    'b' :   randomLowInt(2,99),
+                    'c' :   randomLowInt(2,99),
+                    'l' :   randomInt(2,12),
+                    'pm1':  '+',
+                    'pm2':  '',
+                    'md1':  'xx',
+                    'md2':  '',
+                    'log':  '',
+                    'number':'',
+                    "$" :   "`"
+            };
+            var abc = new Fraction(qNum['a']*qNum['b'],1);
+            if(randomInt(0,1)){
+                qNum['pm1']='-';
+                qNum['md1']='-:';
+                var abc = new Fraction(qNum['a'],qNum['b']);
+            }
+            if(randomInt(0,2)==0){
+                if(randomInt(0,1)){
+                    qNum['pm2']='-';
+                    qNum['md2']='-:';
+                    var c=new Fraction(qNum['c'],1);
+                    abc=abc.div(c);
+                }
+                else{
+                    qNum['pm2']='+';
+                    qNum['md2']='xx';
+                    var c=new Fraction(qNum['c'],1);
+                    abc=abc.mult(c);
+                }
+                qNum['log']='log_[l]([c])';
+            }
+            else
+                qNum['c']='';            
+            qNum['x']=Math.round(x*100000)/100000+'(5dp)';
+            qNum['abc']=abc.string();
+            var number=abc.numerator/abc.denominator;
+            var count=0;
+            while(number/qNum['l']>=1){
+                count++;
+                if(number/qNum['l']==1)
+                    qNum['number']='='+count;
+                number/=qNum['l'];
+            }
+        qNum['question']='<p>Simplify the following:</p><p>[$]log_[l]([a])[pm1]log_[l]([b])[pm2][?log][$]</p>';
+        qNum['answer']='<p>[$]=log_[l]([a][md1][b][md2][c])=log_[l]([abc])[number][$]</p>';            
+			]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Linear Functions</category>
+        <subcategory>Gradient</subcategory>
+        <title>Gradient 1</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+            var qNum={  'x1' :   randomInt(-10,15),
+                    'y1' :   randomInt(-10,15),
+                    'x2' :   randomInt(-10,15),
+                    'y2' :   randomInt(-10,15),
+                    "$" :   "`"
+            };
+            var m=new Fraction(qNum['y2']-qNum['y1'],qNum['x2']-qNum['x1']);
+            qNum['m']=m.string();
+        qNum['question']='<p>What is the gradient of the line passing through the points [$]([x1],[y1])[$] and [$]([x2],[y2])[$]?</p>';
+        qNum['answer']='<p>Using the gradient formula:</p><p>[$]m=(y_2-y_1)/(x_2-x_1)[$]</p><p>We have:</p><p>[$]m=([y2]- [y1])/([x2]- [x1])=[m][$]</p>';            
+			]]>
+        </code>
+    </question>
+
+    <question>
+        <category>Linear Functions</category>
+        <subcategory>Gradient</subcategory>
+        <title>Gradient 2</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+			var qNum={  'x1' :   randomInt(-5,5),
+                    'y1' :   randomInt(-5,5),
+                    'x2' :   randomInt(-5,5),
+                    'y2' :   randomInt(-5,5),
+                    'ifneg':    '',
+                    "$" :   "`"	
+            };
+            while(qNum['x1']==qNum['x2'])
+                qNum['x2']=randomInt(-6,6);
+            while(qNum['y1']==qNum['y2'])
+                qNum['y2']=randomInt(-6,6);
+            qNum['rise']=Math.abs(qNum['y2']-qNum['y1']);
+            qNum['run']=Math.abs(qNum['x2']-qNum['x1']);
+            var m=new Fraction(qNum['y2']-qNum['y1'],qNum['x2']-qNum['x1']);
+            qNum['m']=m.string();
+            if(m.numerator<0)
+                qNum['ifneg']='<br/>Since the line goes downhill, it has a negative gradient'
+                
+            var qGraph=new graphit('qG',-6,6,-6,6,20);
+            var aGraph=new graphit('aG',-6,6,-6,6,20);
+            
+            qGraph.lineExtend('qLine',qNum['x1'],qNum['y1'],qNum['x2'],qNum['y2']);
+            aGraph.lineExtend('aLine',qNum['x1'],qNum['y1'],qNum['x2'],qNum['y2']);
+            aGraph.line('rise',qNum['x2'],qNum['y1'],qNum['x2'],qNum['y2']);
+            aGraph.line('run',qNum['x1'],qNum['y1'],qNum['x2'],qNum['y1']);
+            aGraph.stroke('rise','blue');
+            aGraph.stroke('run','blue');
+            
+            qNum['qgraph']=qGraph.toString();
+            qNum['agraph']=aGraph.toString();
+            
+            
+           
+        qNum['question']='<p>What is the gradient of the line graphed here?</p><p>[qgraph]</p>';
+        qNum['answer']='[agraph]<p>Using the fact that the line passes through [$]([x1],[y1])[$] and [$]([x2],[y2])[$] we can determine that the rise is [rise] and the run is [run].[ifneg] <br />Hence the gradient is [$][m][$].</p>';            
+			]]>
+        </code>
+    </question>
+
+    <question>
+        <category>Linear Functions</category>
+        <subcategory>Equation of a Line</subcategory>
+        <title>Equation of a line 1</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+            var qNum={  'x1' :   0,
+                    'y1' :   randomInt(-5,5),
+                    'x2' :   randomInt(1,5),
+                    'y2' :   randomInt(-5,5),
+                    "$" :   "`"	
+            };
+            while(qNum['y1']==qNum['y2'])
+                qNum['y2']=randomInt(-5,5);            
+            var rise=qNum['y2']-qNum['y1'];
+            var run=qNum['x2']-qNum['x1'];
+            var g=gcd(Math.abs(rise),Math.abs(run));
+            if(g!=1){
+                qNum['x2']=run/g;
+                qNum['y2']=qNum['y1']+rise/g;
+            }
+            var m=new Fraction(qNum['y2']-qNum['y1'],qNum['x2']-qNum['x1']);
+            qNum['m']=m.string();
+			
+			var questionGraph=new graphit('qG',-5,5,-5,5,15);
+			var answerGraph=new graphit('aG',-5,5,-5,5,12);			
+ 			
+            questionGraph.lineExtend('qline',qNum['x1'],qNum['y1'],qNum['x2'],qNum['y2']);
+            answerGraph.lineExtend('aline',qNum['x1'],qNum['y1'],qNum['x2'],qNum['y2']);
+            answerGraph.line('rise',qNum['x1'],qNum['y1'],qNum['x1'],qNum['y2']);
+            answerGraph.stroke('rise','blue');
+            answerGraph.line('run',qNum['x1'],qNum['y2'],qNum['x2'],qNum['y2']);
+            answerGraph.stroke('run','blue');
+            answerGraph.dot('intercept',qNum['x1'],qNum['y1']);
+            answerGraph.fill('intercept','green');
+						
+			qNum['qGraph']=questionGraph.toString();
+			qNum['aGraph']=answerGraph.toString();
+            qNum['question']='<p>[qGraph]</p><p>What is the equation of the line graphed here?</p>';
+            qNum['answer']='<p>[aGraph]</p><p>This line has a <span style="color: blue">gradient</span> of [$][m][$] and a <span style="color: green">y-intercept</span> of [$][y1][$].</p><p>Hence its equation is [$]y=[!m]x[+@y1][$]</p>';
+        ]]>
+        </code>
+    </question>
+
+    <question>
+        <category>Linear Functions</category>
+        <subcategory>Equation of a Line</subcategory>
+        <title>Equation of a line 2</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+			var qGraph=new graphit('qGraph',-5,5,-5,5,30);		
+			var aGraph=new graphit('aGraph',-5,5,-5,5,15);			
+						
+			
+            var m=new Fraction(nonZeroRand(-5,5),randomInt(1,5));
+            var qNum={  'b' :   randomInt(-5,5),
+                    'm' :   m.string(),
+                    "$" :   "`"	
+            };
+            aGraph.lineExtend('line',0,qNum['b'],m.denominator,qNum['b']+m.numerator);
+            qGraph.text('instructions',-3,-1.5,'Click and Drag to draw a line');
+            qGraph.stroke('instructions','grey');
+						
+			qNum['qGraph']=qGraph.toString()
+			qNum['aGraph']=aGraph.toString();						
+			
+			qGraph.ClickIt = function(X,Y){
+				this.mouseDownX=X
+				this.mouseDownY=Y
+				this.hide('instructions');
+				this.dot('dot1',X,Y);
+				this.show('dot1');
+				this.clicked = true;				
+			}
+			
+			qGraph.DragIt = function(X,Y)
+			{
+				if(this.clicked){
+					if(X!=this.mouseDownX || Y!=this.mouseDownY){  
+						this.moved=true;
+						this.dot('dot2',X,Y);
+						this.lineExtend('line2',this.mouseDownX,this.mouseDownY,X,Y);
+					}
+				}				
+			}
+        
+        qGraph.SetIt= function(X,Y)
+		{
+            this.clicked = false;
+            if(this.moved){
+                this.mouseMoveX=this.mouseDownX;
+                this.mouseMoveY=this.mouseDownY;                
+            }
+            else{
+                if(this.mouseMoveX)
+                    this.dot('dot1',this.mouseMoveX,this.mouseMoveY);
+                else{
+                    this.hide('dot1');
+                    this.show('instructions');
+                }
+            }
+            this.moved=false;
+		}
+        qNum['question']='<p>What would the graph of the line:</p><p>[$]y=[!m]x[+@b][$]</p><p>look like?</p>';
+        qNum['answer']='[aGraph]';
+        qNum['answerType']=qGraph.SVG;                
+			]]>
+        </code>
+    </question>
+
+    <question>
+        <category>Linear Functions</category>
+        <subcategory>Equation of a Line</subcategory>
+        <title>Parrallel/Perpendicular Lines</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+	  var m=new Fraction(nonZeroRand(-5,5),nonZeroRand(5,-5));
+	  var qNum={  'x1' :   randomInt(-10,10),
+			  'y1' :   randomInt(-10,10),
+			  'p' :   randomArrayElement(['perpendicular','parallel']),
+			  "$" :   "`"
+		  };
+	  var a=randomInt(1,9);
+	  var b=nonZeroRand(-9,9);
+	  var c=randomInt(-12,12);
+	  var l1=new algebra();
+	  var x=new term();
+	  x.addSymbol('x',new Fraction(1,1));
+	  var y=new term();
+	  y.addSymbol('y',new Fraction(1,1));
+	  var m1,m2,yi;
+	  if(randomInt(0,1)){
+		l1.coef[0]=new Fraction(a,1)
+		l1.terms[0]=x;
+		l1.coef[1]=new Fraction(b,1)
+		l1.terms[1]=y;
+		l1.coef[2]=new Fraction(c,1)
+		l1.terms[2]=new term();
+		qNum['line1']=l1.string()+'=0';
+		m1=new Fraction(a*-1,b);
+		yi=c*-1/b;
+	  }
+	  else{
+		l1.coef[0]=new Fraction(b,a);
+		l1.terms[0]=x;
+		if(c!=0){
+		  l1.coef[1]=new Fraction(c,1);
+		  l1.terms[1]=new term();
+		}
+		qNum['line1']='y='+l1.string();
+		m1=new Fraction(b,a);
+		yi=c;
+	  }
+	  qNum['m1']=m1.string();
+	  var X=0,Y=0;
+	  if(qNum['p']=='perpendicular')
+	  m2=new Fraction(m1.denominator*-1,m1.numerator)
+	  else
+	  m2=m1;
+	  qNum['m2']=m2.string();
+  
+	  var l2=new algebra();
+	  l2.coef[0]=m2;
+	  l2.terms[0]=x;
+	  l2.coef[1]=m2.mult(new Fraction(qNum['x1']*-1,1)).add(new Fraction(qNum['y1'],1));
+	  l2.terms[1]=new term();
+	  qNum['line2']='y='+l2.string();
+  
+	  var b1=l2.coef[1].numerator/l2.coef[1].denominator;
+	  if(qNum['p']=='perpendicular'){
+		var m1I=m1.numerator/m1.denominator;
+		var m2I=m2.numerator/m2.denominator;
+		X=(yi-b1)/(m2I-m1I);
+		Y=(yi*m2I-b1*m1I)/(m2I-m1I);
+	  }
+	  var ymin=Math.min(qNum['y1'],Y,b1,0);
+	  var ymax=Math.max(qNum['y1'],Y,b1,0);
+	  var xmin=Math.min(qNum['x1'],X,0);
+	  var xmax=Math.max(qNum['x1'],X,0);
+  
+	  var wide=xmax-xmin;
+	  var high=ymax-ymin;
+	  
+	  var canavasX=400;
+	  var canvasY=200;
+	  var cellSize=20;
+	  var xstep=Math.ceil((wide+2)/canavasX*cellSize);
+	  var ystep=Math.ceil((high+2)/canvasY*cellSize);
+	  
+	  var xspacing =Math.round(canavasX/(wide+2*xstep));
+	  var yspacing =Math.round(canvasY/(high+2*ystep));
+	  var spacing=Math.min(xspacing,yspacing);
+  
+	  var hfit=Math.round(canavasX/(spacing));
+	  var vfit=Math.round((canvasY/(spacing)));
+  
+	  var diff=Math.floor(Math.max(hfit-2*xstep-wide,0)/2);
+	  xmin-=diff;
+	  xmax+=diff;
+	  diff=Math.floor(Math.max(vfit-2*ystep-high,0)/2);
+	  ymin-=diff;
+	  ymax+=diff;
+  
+	  var answergraph=new graphit('theanswer',xmin,xmax,ymin,ymax,Math.min(xspacing,yspacing));
+  
+	  answergraph.xstep=Math.ceil(20/answergraph.spacing);
+	  answergraph.ystep=Math.ceil(20/answergraph.spacing);
+	  if(answergraph.xstep>1 || answergraph.ystep>1)
+		answergraph.drawGrid();
+  
+	  answergraph.graphLine('line1',m1,yi);
+	  answergraph.stroke('line1','blue');
+	  answergraph.graphLine('line2',m2,b1);
+	  answergraph.dot('p1',qNum['x1'],qNum['y1']);
+	  qNum['diagramAnswerHere']=answergraph.toString();
+        qNum['question']='<p>Find the equation of the line that is [p] to the line [$][line1][$] and passes through the point [$]([x1],[y1])[$]</p>';
+        qNum['answer']='<p>Line <span style="color: blue"> [$][line1][$]</span> has gradient [$][m1][$]. Since we want a line [p] to it, we are looking for a line with gradient [$][m2][$].</p><p>Using the point/gradient formula:<br/> [$]y- [y1]=[m2](x- [x1])[$]</p><p>The equation is [$][line2][$]</p><p>[graph]</p>[diagramAnswerHere]';          	  
+			]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Linear Functions</category>
+        <subcategory>Equation of a Line</subcategory>
+        <title>Two-Point Formula</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+	    var m=new Fraction(nonZeroRand(-5,5),nonZeroRand(5,-5));
+	    var qNum={  'x1' :   randomInt(-10,10),
+                    'y1' :   randomInt(-10,10),
+		    'x2' :   randomInt(-10,10),
+                    'y2' :   randomInt(-10,10),
+                    "$" :   "`"
+            };
+	    if(qNum['x1']==qNum['x2'])
+		qNum['x2']++;
+            if(qNum['y1']==qNum['y2'])
+		qNum['y2']++;
+	    var m=new Fraction(qNum['y2']-qNum['y1'],qNum['x2']-qNum['x1']);
+	    qNum['m']=m.string();
+
+	    var xmin=Math.min(Math.min(qNum['x1'],qNum['x2']),0);
+	    var xmax=Math.max(Math.max(qNum['x1'],qNum['x2']),0);
+	    var ymin=Math.min(Math.min(qNum['y1'],qNum['y2']),0);
+	    var ymax=Math.max(Math.max(qNum['y1'],qNum['y2']),0);
+
+	    var wide=xmax-xmin;
+	    var high=ymax-ymin;
+	    var xstep=Math.ceil((wide+2)/8);
+	    var ystep=Math.ceil((high+2)/6.5);
+
+	    var xspacing =Math.round(160/(wide+2*xstep));
+	    var yspacing =Math.round(130/(high+2*ystep));
+	    var spacing=Math.min(xspacing,yspacing);
+
+	    var hfit=Math.round(160/(spacing));
+	    var vfit=Math.round((130/(spacing)));
+
+	    var diff=Math.floor(Math.max(hfit-2*xstep-wide,0)/2);
+	    xmin-=diff;
+	    xmax+=diff;
+	    diff=Math.floor(Math.max(vfit-2*ystep-high,0)/2);
+	    ymin-=diff;
+	    ymax+=diff;
+
+	    var answergraph=new graphit('theanswer',xmin,xmax,ymin,ymax,Math.min(xspacing,yspacing));
+
+	    answergraph.xstep=Math.ceil(20/answergraph.spacing);
+	    answergraph.ystep=Math.ceil(20/answergraph.spacing);
+	    if(answergraph.xstep>1 || answergraph.ystep>1)
+		answergraph.drawGrid();
+
+	    answergraph.lineExtend('answer',qNum['x1'],qNum['y1'],qNum['x2'],qNum['y2']);
+	    answergraph.dot('p1',qNum['x1'],qNum['y1']);
+	    answergraph.dot('p2',qNum['x2'],qNum['y2']);
+            qNum['graph']=answergraph.toString();
+
+	    var x1=new Fraction(qNum['x1'],1);
+	    var y1=new Fraction(qNum['y1'],1);
+	    var nOne=new Fraction(-1,1);
+
+	    var x=new term();
+	    x.addSymbol('x',new Fraction(1,1));
+	    var y=new term();
+	    y.addSymbol('y',new Fraction(1,1));
+	    var mx1=new algebra();
+	    mx1.coef[0]=m;
+	    mx1.terms[0]=x;
+	    mx1.coef[1]=x1.mult(nOne).mult(m);
+	    mx1.terms[1]=new term();
+	    qNum['mx1']=mx1.string();
+	    var yy1=new algebra();
+	    yy1.coef[0]=new Fraction(1,1);
+	    yy1.terms[0]=y;
+	    yy1.coef[1]=y1.mult(nOne);
+	    yy1.terms[1]=new term();
+	    qNum['yy1']=yy1.string();
+	    yy1.coef.splice(0,1);
+	    yy1.terms.splice(0,1);
+	    var mxb=mx1.sub(yy1);
+	    qNum['mxb']=mxb.string();
+        qNum['question']='<p>What is the equation of the line passing through the points [$]([x1],[y1])[$] and [$]([x2],[y2])[$]?</p>';
+        qNum['answer']='<p>Using the two-point formula: [$](y-y_1)/(x-x_1)=(y_2-y_1)/(x_2-x_1)[$]</p><p>[$](y- [y1])/(x- [x1])=([y2]-[y1])/([x2]- [x1])=[m][$]<br/>[$][yy1]=[m](x- [x1])=[mx1][$]<br/>[$]y=[mx1][+y1][$]</p><p>[$]y=[mxb][$]</p><p>[graph]</p>';            
+	  ]]>
+        </code>
+    </question>
+  
+    <question>
+        <category>Linear Functions</category>
+        <subcategory>Equation of a Line</subcategory>
+        <title>Point-Gradient Formula</title>
+        <suitable>
+            <course>UONPREP093</course>
+            <course>EPMATH135</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code> 
+	  <![CDATA[
+	    var m=new Fraction(nonZeroRand(-5,5),nonZeroRand(5,-5));
+	    var qNum={  'x1' :   randomInt(-10,20),
+                    'y1' :   randomInt(-10,20),
+		    'm'	 :   m.string(),
+                    "$" :   "`"
+            };
+	    var xi=qNum['x1']-qNum['y1']*m.denominator/m.numerator;
+	    var yi=qNum['y1']-m.numerator*qNum['x1']/m.denominator;
+	    var xmin=Math.floor(Math.min(xi,0));
+	    var xmax=Math.ceil(Math.max(xi,0));
+	    var ymin=Math.floor(Math.min(yi,0));
+	    var ymax=Math.ceil(Math.max(yi,0));
+	    if(xi==0 && yi==0){
+		xmin=0;
+		xmax=m.denominator*2;
+		ymin=0;
+		if(m.negative)
+		    ymax=m.numerator*-2;
+		else
+		    ymax=m.numerator*2;
+	    }
+	    var wide=xmax-xmin;
+	    var high=ymax-ymin;
+	    var xstep=Math.ceil((wide+2)/12);
+	    var ystep=Math.ceil((high+2)/6.5);
+
+	    var xspacing =Math.round(240/(wide+2*xstep));
+	    var yspacing =Math.round(130/(high+2*ystep));
+	    var spacing=Math.min(xspacing,yspacing);
+
+	    var hfit=Math.round(260/(spacing));
+	    var vfit=Math.round((120/(spacing)));
+
+	    var diff=0;
+	    if(xmin==0)
+		diff=Math.floor(Math.max(hfit-2*xstep-xmax,0)/2);
+	    else
+		diff=Math.floor(Math.max(hfit-2*xstep+xmin,0)/2);
+	    xmin-=diff;
+	    xmax+=diff;
+	    if(ymin==0)
+		diff=Math.floor(Math.max(vfit-2*ystep-ymax,0)/2);
+	    else
+		diff=Math.floor(Math.max(vfit-2*ystep+ymin,0)/2);
+	    ymin-=diff;
+	    ymax+=diff;
+
+	    var answergraph=new graphit('theanswer',xmin,xmax,ymin,ymax,Math.min(xspacing,yspacing));
+
+		answergraph.xstep=Math.ceil(20/answergraph.spacing);
+		answergraph.ystep=Math.ceil(20/answergraph.spacing);
+		if(answergraph.xstep>1 || answergraph.ystep>1)
+		    answergraph.drawGrid();	   
+
+	    if(xi==0 && yi==0)
+			answergraph.graphLine('answer',m,yi);
+	    else
+			answergraph.lineExtend('answer',0,yi,xi,0);			
+            qNum['graph']=answergraph.toString();
+
+	    var x1=new Fraction(qNum['x1'],1);
+	    var y1=new Fraction(qNum['y1'],1);
+	    var nOne=new Fraction(-1,1);
+
+	    var x=new term();
+	    x.addSymbol('x',new Fraction(1,1));
+	    var y=new term();
+	    y.addSymbol('y',new Fraction(1,1));
+	    var mx1=new algebra();
+	    mx1.coef[0]=m;
+	    mx1.terms[0]=x;
+	    mx1.coef[1]=x1.mult(nOne).mult(m);
+	    mx1.terms[1]=new term();
+	    qNum['mx1']=mx1.string();
+	    var yy1=new algebra();
+	    yy1.coef[0]=new Fraction(1,1);
+	    yy1.terms[0]=y;
+	    yy1.coef[1]=y1.mult(nOne);
+	    yy1.terms[1]=new term();
+	    qNum['yy1']=yy1.string();
+	    yy1.coef.splice(0,1);
+	    yy1.terms.splice(0,1);
+	    var mxb=mx1.sub(yy1);
+	    qNum['mxb']=mxb.string();
+        qNum['question']='<p>What is the equation of the line passing through the point [$]([x1],[y1])[$] with a gradient of [$][m][$]?</p>';
+        qNum['answer']='<p>Using the point-gradient formula: [$]y-y_1=m(x-x_1)[$]</p><p>[$]y- [y1]=[m](x- [x1])[$]<br/>[$][yy1]=[mx1][$]<br/>[$]y=[mx1][+y1][$]</p><p>[$]y=[mxb][$]</p><p>[graph]</p>';
+	  ]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Statistics</category>
+        <subcategory>Representing Data</subcategory>
+        <title>Frequency Distribution Tables</title>
+        <suitable>
+            <course>EPMATH235</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code>
+            <![CDATA[
+                var r=randomInt(2,5), c=randomInt(5,10), range=randomInt(4,8), min=randomLowInt(0,120);
+                var freq=new statTable('freqTable',range+3,4,true);
+                freq.data[0][0]='Score';
+                freq.data[1][0]='Frequency';
+                freq.data[2][0]='Cumulative</br>Frequency';
+                freq.data[3][0]='Relative</br>Frequency';
+                freq.data[0][range+2]='TOTAL';
+                freq.data[1][range+2]=r*c;
+                freq.data[2][range+2]='';
+                freq.data[3][range+2]='100%';
+                for(var i=0; i<=range;i++){
+                    freq.data[0][i+1]=min+i;
+                    freq.data[1][i+1]=0;
+                }
+                var table=new statTable('dataTable',r,c);
+                for(var i=0;i<c;i++){
+                    for(var j=0;j<r;j++){
+                        var d=randomInt(min,min+range);
+                        table.data[i][j]=d;
+                        freq.data[1][d-min+1]++;                    
+                    }
+                }
+                for(var i=0; i<=range;i++){
+                    if(i==0)
+                        freq.data[2][i+1]=freq.data[1][i+1];
+                    else
+                        freq.data[2][i+1]=freq.data[1][i+1]+freq.data[2][i];
+                    freq.data[3][i+1]=Math.round(freq.data[1][i+1]/(r*c)*100)+'%';
+                }
+                var working=new statTable('workingTable',2,2,true,true);
+                working.clear();
+                var qNum ={ 'data':     table.toString(),
+                            'table':    freq.toString(),
+                            'answerType': working.toNode()
+                };
+                qNum['question']='<p>Organise the following data into a frequency distribution table:</p><p>[data]</p><p>Put the following columns in your table: frequency, cumulative frequency and relative frequency(%)</p>';
+                qNum['answer']='<p>[table]</p>';
+            ]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Statistics</category>
+        <subcategory>Representing Data</subcategory>
+        <title>Histograms &amp; Polygons</title>
+        <suitable>
+            <course>EPMATH235</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code>
+            <![CDATA[
+                var min=randomInt(1,150), scores=['Score'], freq=['Frequency'],range=randomInt(5,9), niceScale = [1, 2, 5, 10, 20, 50, 100], p=0,fMax=0,sum=0;
+                var isCumulative=randomInt(0,1), isPolygon=randomInt(0,1);
+                var data=new statTable('data',range+1,2, true);                
+                for(var i=1;i<=range;i++){
+                    scores[i]=min+i;
+                    freq[i]= randomLowInt(1,50);
+                    sum+=freq[i];
+                    if(fMax<freq[i])
+                        fMax=freq[i];
+                }
+                data.addData([scores,freq]);
+                var h=new histogram('chart',scores[1],scores[range],1,freq.slice(1));
+                if(isPolygon)
+                    h.setPolygon(true);
+                if(isCumulative){
+                    h.setCumulative(true);
+                    while(p<niceScale.length-1 && sum/niceScale[p]>15)
+                        p++;
+                }
+                else {
+                    while(p<niceScale.length-1 && fMax/niceScale[p]>15)
+                        p++;
+                }
+                h.fScale=niceScale[p];
+                h.draw();
+                var qNum = {'cumulative': (isCumulative)?'<u>cumulative</u> ':'',
+                            'histogram': (isPolygon)?'polygon':'histogram',
+                            'data': data.toString(),
+                            'chart': h.toString()};
+                qNum['question']='<p>Draw a [cumulative] frequency <b>[histogram]</b> for the following data:</p><p>[data]</p>';
+                qNum['answer']='<p>[chart]</p>';
+            ]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Statistics</category>
+        <subcategory>Central Tendency</subcategory>
+        <title>Mode</title>
+        <suitable>
+            <course>EPMATH235</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code>
+            <![CDATA[
+                var setSize=randomInt(5,15), setMin=randomInt(0,100), setRange=randomInt(5,10);
+                var set=[], freq=[], fMax=0, fMaxVal=[];
+                for(var i=0;i<setRange;i++)
+                    freq[setMin+i]=0;
+                for(var i=0;i<setSize;i++){
+                    set[i]=randomInt(setMin,setMin+setRange-1);
+                    freq[set[i]]++;
+                    if(fMax<freq[set[i]])
+                        fMax++;
+                }
+                for(var i=0;i<setRange;i++)
+                    if(freq[setMin+i]==fMax)
+                        fMaxVal.push(setMin+i);
+                var qNum = {'data': set.toString(),
+                            's': (fMaxVal.length>1)?'s are':' is',
+                            'mode': fMaxVal.toString()};
+                qNum['question']='<p>Find the mode of the following data set:</p><p>[data]</p>';
+                qNum['answer']='<p>The mode[s]: [mode]</p>';                
+            ]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Statistics</category>
+        <subcategory>Central Tendency</subcategory>
+        <title>Median</title>
+        <suitable>
+            <course>EPMATH235</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code>
+            <![CDATA[
+                cardinalityString=function(int){
+                    if(int%10==1)
+                        return 'st';
+                    else if(int%10==2)
+                        return 'nd';
+                    else if(int%10==3)
+                        return 'rd';
+                    else
+                        return 'th';
+                }
+                
+                var setSize=randomInt(4,16), setMin=randomInt(0,100), setRange=randomInt(5,50);
+                var set=[], sortSet=[], card1='th', card2='th', med1,med2, oneMedian=true;
+                if(setSize%2==0){
+                    med1=setSize/2;
+                    med2=med1+1;
+                    card1=cardinalityString(med1);
+                    card2=cardinalityString(med2);
+                    oneMedian=false;
+                }
+                else{
+                    med1=(setSize+1)/2;
+                    card1=cardinalityString(sortSet[med1]);
+                }
+                for(var i=0;i<setSize;i++)
+                    set[i]=randomInt(setMin,setMin+setRange-1);
+                sortSet=set.slice().sort(function(a, b){return a-b});                
+                var qNum = {'data': set.toString(),
+                            'sort':sortSet.toString(),
+                            'n':setSize,
+                            'nth':(oneMedian)?med1+card1+' score':med1+card1+' & '+med2+card2+' scores',
+                            'median': (oneMedian)?sortSet[med1-1]:(sortSet[med1-1]+sortSet[med2-1])/2};
+                qNum['question']='<p>Find the median of the following data set:</p><p>[data]</p>';
+                qNum['answer']='<p>First sort the data set:</p><p>[sort]</p><p>There are [n] scores so find the [nth]</p><p>The median is: [median]</p>';
+            ]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Statistics</category>
+        <subcategory>Central Tendency</subcategory>
+        <title>Mean</title>
+        <suitable>
+            <course>EPMATH235</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code>
+            <![CDATA[                
+                var setSize=randomInt(4,12), setMin=randomInt(0,100), setRange=randomInt(5,50);
+                var set=[], sum=0;
+                for(var i=0;i<setSize;i++){
+                    set[i]=randomInt(setMin,setMin+setRange-1);
+                    sum+=set[i];
+                }
+                var qNum = {'data': set.toString(),                            
+                            'n':setSize,
+                            'x':sum,
+                            'mean': Math.round(sum*100/setSize)/100};
+                qNum['question']='<p>Find the mean of the following data set (2dp):</p><p>[data]</p>';
+                qNum['answer']='<p>There are [n] scores. The sum of the scores is [x]</p><p>The mean is: `[x]/[n]=[mean]` (2dp)</p>';
+            ]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Statistics</category>
+        <subcategory>Central Tendency</subcategory>
+        <title>Frequency Tables</title>
+        <suitable>
+            <course>EPMATH235</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code>
+            <![CDATA[
+                cardinalityString=function(int){
+                    if(int%10==1)
+                        return 'st';
+                    else if(int%10==2)
+                        return 'nd';
+                    else if(int%10==3)
+                        return 'rd';
+                    else
+                        return 'th';
+                }
+                var setMin=randomInt(0,100), setRange=randomInt(5,9);
+                var scores=[], freq=[], cf=[], fx=[], sum=0, n=0, fMax=0, mode=[], median;
+                for(var i=0;i<setRange;i++){
+                    scores[i]=setMin+i;
+                    freq[i]= randomLowInt(1,120);
+                    if(fMax<freq[i]){
+                        fMax=freq[i];
+                        mode=[scores[i]];
+                    }
+                    else if(fMax==freq[i])
+                        mode.push(scores[i]);
+                    n+=freq[i];
+                    if(i)
+                        cf[i]=cf[i-1]+freq[i];
+                    else
+                        cf[i]=freq[i];
+                    fx[i]=scores[i]*freq[i];
+                    sum+=fx[i];
+                }
+                var med=Math.ceil((n+1)/2), i=0;
+                while(cf[i]<med)
+                    i++;
+                if(n%2==0 && i>0 && cf[i-1]==med-1)
+                    median=(scores[i]+scores[i-1])/2
+                else
+                    median=scores[i];
+                scores.unshift('Score');
+                scores.push('Total:');
+                freq.unshift('Frequency');
+                freq.push(n);
+                cf.unshift('c.f.');
+                cf.push('');
+                fx.unshift('fx');
+                fx.push(sum);
+                var data=new statTable('data',setRange+1,2,true);
+                data.addData([scores,freq]);
+                var answer=new statTable('answer',setRange+2,4,true);
+                answer.addData([scores,freq,cf,fx]);
+                var working=new statTable('working',2,2,true,true);
+                working.clear();
+                var qNum = {'data': data.toString(),
+                            'table':answer.toString(),
+                            'n':n,
+                            'sum':sum,
+                            'mode':mode.toString(),
+                            'f':fMax,
+                            'median':median,
+                            'med':(n%2==0)?(med-1)+' &amp; '+med:med,
+                            'cf':cf[i+1],
+                            'mean': Math.round(sum*100/n)/100};
+                qNum['question']='<p>Find the mode, median and mean of the following data set:</p><p>[data]</p>';
+                qNum['answer']='<p>[table]</p><p>The highest frequency is [f], so the mode is: [mode]</p><p>There are [n] scores, so look for [med] in cf column. The median is [median] (cf=[cf])</p><p>mean`=[sum]/[n]=[mean]` (2dp)</p>';
+                qNum['answerType']=working.toNode();
+            ]]>
+        </code>
+    </question>
+    
+    <question>
+        <category>Statistics</category>
+        <subcategory>Measures of Dispersion</subcategory>
+        <title>Box Plots</title>
+        <suitable>
+            <course>EPMATH235</course>
+            <course>EPMATH302</course>
+        </suitable>
+        <code>
+            <![CDATA[
+                var dataType=randomInt(0,2), box, data=[],range=0,iqr=0,aTable;
+                if(dataType){
+                    var min=randomInt(0,50),max=randomInt(min,min*10),n=randomInt(5,10);
+                    var dMin=500,dMax=0, med,q1,q3;
+                    for(var i=0;i<n;i++){
+                        data[i]=randomInt(min,max);
+                        if(dMax<data[i])
+                            dMax=data[i];
+                        if(data[i]<dMin)
+                            dMin=data[i];
+                    }
+                    range=dMax-dMin;
+                    sortData=data.slice().sort(function(a, b){return a-b});
+                    if(n%2==0){
+                        med=(sortData[n/2-1]+sortData[n/2])/2;
+                        if(n%4==0){
+                            q1=(sortData[n/4-1]+sortData[n/4])/2;
+                            q3=(sortData[n/4*3-1]+sortData[n/4*3])/2;
+                        }
+                        else{
+                            q1=sortData[Math.ceil(n/4)-1];
+                            q3=sortData[Math.ceil(n/4*3)-1];
+                        }
+                    }
+                    else{
+                        med=sortData[(n+1)/2-1];
+                        if((n-1)%4==0){
+                            q1=(sortData[(n-1)/4-1]+sortData[(n-1)/4])/2;
+                            q3=(sortData[(n-1)/4*3]+sortData[(n-1)/4*3+1])/2;
+                        }
+                        else{
+                            q1=sortData[Math.ceil(n/4)-1];
+                            q3=sortData[Math.ceil(n/4*3)-1];
+                        }
+                    }
+                    iqr=q3-q1;                   
+                    box=boxPlot(dMin,q1,med,q3,dMax);                    
+                }
+                else{
+                    var min=randomInt(1,150), n=0, cf=[0], scores=['Score'], freq=['Frequency'];
+                    range=randomInt(4,9);
+                    data=new statTable('data',range+2,2, true);
+                    aTable=new statTable('answer',range+2,3,true);
+                    for(var i=1;i<=range+1;i++){
+                        scores[i]=min+i;
+                        freq[i]= randomLowInt(1,50);
+                        n+=freq[i];
+                        cf[i]=cf[i-1]+freq[i];
+                    }
+                    cf[0]='c.f.';
+                    data.addData([scores,freq]);
+                    aTable.addData([scores,freq,cf]);
+                    var q1=-1,m=-1,q3=-1, i=1;
+                    while(q3==-1){
+                        if(q1==-1 && cf[i]>=n/4)
+                            q1=i;
+                        if(m==-1 && cf[i]>=n/2)
+                            m=i;
+                        if(q3==-1 && cf[i]>=3*n/4)
+                            q3=i;
+                        i++;
+                    }
+                    iqr=scores[q3]-scores[q1];
+                    box=boxPlot(scores[1],scores[q1],scores[m],scores[q3],scores[range+1]);                    
+                }
+                var d = document.createElement('div');
+                d.appendChild(box);                
+                var qNum = {'data': data.toString(),
+                            'range': range,
+                            'IQR': iqr,
+                            'reorder':(dataType)?'<p>sorting data first:'+sortData.toString()+'</p>':'',
+                            'box': d.innerHTML,
+                            'answerTable':(dataType)?'':'</br>(using cumulative frequencies)'+ aTable.toString()
+                        };
+                qNum['question']='<p>Draw a box and whiskers plot for the following data</p><p>[data]</p><p>State the range and interquartile range.</p>';
+                qNum['answer']='<p>[reorder][box][answerTable]</p><p>Range = [range], interquartile range = [IQR]</p>';                
+            ]]>
+        </code>
+    </question>
+    
+</root>

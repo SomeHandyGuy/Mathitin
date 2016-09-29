@@ -1,0 +1,72 @@
+/*
+CSS for 'Show me the Answer button'
+*/
+/* 
+    Created on : 02/09/2015, 7:49:49 AM
+    Author     : sda773
+*/
+
+
+input[type='checkbox'][class='toggle']{
+    /*invisible checkbox that stored the show-state of the answer box*/
+    display: none;
+}
+
+.toggle{
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.5s;
+}
+
+input[type='checkbox'][class='toggle']:checked + .toggle{
+    opacity: 1;
+    visibility: visible;
+}
+
+.tab{
+    display: inline-table;
+    margin-top: 15px;
+}
+
+.tab>label{
+    background: #eee; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    margin-left: -1px; 
+    position: relative;
+    left: 1px; 
+}
+
+.tab > input[type=radio]{
+    display: none;
+}
+
+.tab > input[type=radio]:checked + label {
+    background: white;
+    border-bottom: 1px solid white;
+    z-index: 2;
+    line-height: 2em;
+    vertical-align: top;
+}
+
+.tab>div{
+    display: none;
+    position: absolute;
+    left: 0.5em;
+    margin-top: 2px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    -webkit-box-shadow: 5px 10px 20px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 10px 20px 0px rgba(0,0,0,0.75);
+    box-shadow: 5px 10px 20px 0px rgba(0,0,0,0.75);
+}
+
+.tab > input[type=radio]:checked ~ div{
+    display: block;
+}
+
+#instructorNavTabs{
+    margin-left: 8px;
+}
+
+

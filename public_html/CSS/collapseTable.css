@@ -1,0 +1,64 @@
+/* 
+    Created on : 07/10/2015, 4:27:39 AM
+    Author     : sda773
+*/
+
+.collapseTable{
+    background-color: cornsilk;
+    padding: 2px;
+}
+
+.collapseTable input[type='checkbox']{
+    width: 1.2em;
+    height: 1.2em;
+    color: green;
+    background-color: white;
+}
+
+.collapseTable input[type='checkbox']+div{
+    display: inline-block;
+}
+
+.collapseTable div{
+    text-align: right;
+    vertical-align: top;
+    border: ridge 3px;
+    margin-top: -3px;
+    margin-right: -3px;
+}
+
+.collapseTable label{
+    padding-left: 1em;
+}
+
+.collapseTable label:hover{
+    color: red;
+}
+
+.collapseTable input[type='checkbox'][id^='collapseCheckbox']{
+    display: none;
+}
+
+.collapseTable input[type='checkbox'][id^='collapseCheckbox'] +div+ label:after{
+    content: '[show]';
+}
+
+.collapseTable input[type='checkbox'][id^='collapseCheckbox']:checked +div+ label:after{
+    content: '[hide]';
+}
+
+.collapseTable input[type='checkbox'][id^='collapseCheckbox'] + div{
+    max-height: 0;
+    /*max-width: 10px;*/
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s ease-in-out;
+}
+
+.collapseTable input[type='checkbox'][id^='collapseCheckbox']:checked ~ div{
+    max-height: 1000px;
+    /*max-width: 1000px;*/
+    visibility: visible;
+    opacity: 1;
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}

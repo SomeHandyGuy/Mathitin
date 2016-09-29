@@ -1,0 +1,108 @@
+
+/* 
+    Created on : 14/09/2015, 4:11:33 AM
+    Author     : sda773
+*/
+
+.niceLookingButton{
+    margin: 0.25em 0.25em 0.25em 1em;
+
+    -moz-box-shadow: 1px 1px 0px 0px #1c1b18;
+    -webkit-box-shadow: 1px 1px 0px 0px #1c1b18;
+    box-shadow: 1px 1px 0px 0px #1c1b18;
+    
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #eae0c2), color-stop(1, #ccc2a6));
+    background:-moz-linear-gradient(top, #eae0c2 5%, #ccc2a6 100%);
+    background:-webkit-linear-gradient(top, #eae0c2 5%, #ccc2a6 100%);
+    background:-o-linear-gradient(top, #eae0c2 5%, #ccc2a6 100%);
+    background:-ms-linear-gradient(top, #eae0c2 5%, #ccc2a6 100%);
+    background:linear-gradient(to bottom, #eae0c2 5%, #ccc2a6 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eae0c2', endColorstr='#ccc2a6',GradientType=0);
+    background-color:#eae0c2;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius:10px;
+    //border:2px solid #333029;
+    cursor:pointer;
+    color:#505739;
+    font-family:Arial;
+    font-size:14px;
+    font-weight:bold;
+    padding:10px 14px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #ffffff;
+}
+
+.niceLookingButton:hover {
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ccc2a6), color-stop(1, #eae0c2));
+    background:-moz-linear-gradient(top, #ccc2a6 5%, #eae0c2 100%);
+    background:-webkit-linear-gradient(top, #ccc2a6 5%, #eae0c2 100%);
+    background:-o-linear-gradient(top, #ccc2a6 5%, #eae0c2 100%);
+    background:-ms-linear-gradient(top, #ccc2a6 5%, #eae0c2 100%);
+    background:linear-gradient(to bottom, #ccc2a6 5%, #eae0c2 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ccc2a6', endColorstr='#eae0c2',GradientType=0);
+    background-color:#ccc2a6;
+}
+.niceLookingButton:active {
+    position:relative;
+    top:1px;
+}
+
+.niceNavButton{
+    margin-bottom: 10px;
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    font-family: Arial;
+    /*background-color: #538fbe;*/
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #2d6898;
+    background-image: linear-gradient(bottom, rgb(73,132,180) 0%, rgb(97,155,203) 100%);
+    background-image: -o-linear-gradient(bottom, rgb(73,132,180) 0%, rgb(97,155,203) 100%);
+    background-image: -moz-linear-gradient(bottom, rgb(73,132,180) 0%, rgb(97,155,203) 100%);
+    background-image: -webkit-linear-gradient(bottom, rgb(73,132,180) 0%, rgb(97,155,203) 100%);
+    background-image: -ms-linear-gradient(bottom, rgb(73,132,180) 0%, rgb(97,155,203) 100%);
+
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(73,132,180)),
+        color-stop(1, rgb(97,155,203))
+        );
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    text-shadow: 0px -1px 0px rgba(0,0,0,.5);
+    -webkit-box-shadow: 0px 6px 0px #2b638f, 0px 3px 15px rgba(0,0,0,.4), inset 0px 1px 0px rgba(255,255,255,.3), inset 0px 0px 3px rgba(255,255,255,.5);
+    -moz-box-shadow: 0px 6px 0px #2b638f, 0px 3px 15px rgba(0,0,0,.4), inset 0px 1px 0px rgba(255,255,255,.3), inset 0px 0px 3px rgba(255,255,255,.5);
+    box-shadow: 0px 6px 0px #2b638f, 0px 3px 15px rgba(0,0,0,.4), inset 0px 1px 0px rgba(255,255,255,.3), inset 0px 0px 3px rgba(255,255,255,.5);
+}
+
+.niceNavButton:hover, .niceNavButton:disabled {
+    background-image: linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
+    background-image: -o-linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
+    background-image: -moz-linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
+    background-image: -webkit-linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
+    background-image: -ms-linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
+
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(79,142,191)),
+        color-stop(1, rgb(102,166,214))
+        );
+}
+
+.niceNavButton:active {
+    position:relative;
+    top:1px;
+}
+
+.niceNavButton:disabled{
+    color: lightgray;
+    text-decoration: line-through;
+}

@@ -1,0 +1,101 @@
+
+body{
+    width: 1150px;
+    background: rgb(214,219,191);
+    background: -moz-linear-gradient(-45deg, rgba(214,219,191,1) 0%, rgba(254,255,232,1) 100%);
+    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(214,219,191,1)), color-stop(100%,rgba(254,255,232,1)));
+    background: -webkit-linear-gradient(-45deg, rgba(214,219,191,1) 0%,rgba(254,255,232,1) 100%);
+    background: -o-linear-gradient(-45deg, rgba(214,219,191,1) 0%,rgba(254,255,232,1) 100%);
+    background: -ms-linear-gradient(-45deg, rgba(214,219,191,1) 0%,rgba(254,255,232,1) 100%);
+    background: linear-gradient(135deg, rgba(214,219,191,1) 0%,rgba(254,255,232,1) 100%);
+}
+
+#pStudentAnswer{
+    min-height: 3em;
+}
+
+.page {
+    display: block;
+    overflow: hidden;
+    margin: 1em;
+
+    width: 450px;
+    height: 420px;
+    padding: 20px;
+
+    border-width: 1px;
+    border-style: solid;
+    border-color: #959595;
+
+    background-color: #FFFFFF;
+
+    font-size: 11pt;
+    font-family: Century Gothic, sans-serif;
+
+    -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(0, 0, 0, 0.03);
+    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(0, 0, 0, 0.03);
+}
+
+.pagecontainter{
+    display: inline-block;
+    vertical-align: top;    
+}
+
+.paper {
+    margin: 1em;
+    display: inline-block;
+    font: 10pt Arial, sans-serif;    
+    line-height: 20.5px;
+    padding-top: 36px;
+    width: 450px;
+    height: 900px;
+    padding-left: 60px;
+    padding-right: 60px;
+    text-align: justify;
+    background-image:  -webkit-linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -webkit-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -webkit-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -webkit-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
+    background-image:  -moz-linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -moz-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -moz-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -moz-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
+    background-image:  -ms-linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -ms-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -ms-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -ms-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
+    background-image:  -o-linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -o-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -o-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -o-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
+    background-image:  linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
+    background-size: 1px, 1px, auto, auto 20px;
+    background-repeat: repeat-y, repeat-y, no-repeat, repeat;
+    background-position: 520px 0px, 50px 0px, 0px 0px, 0px 0px;
+    box-shadow: 5px 5px 5px #888888;
+}
+
+.paper p{
+    margin-top: 18px;
+    margin-bottom: 0;
+}
+
+.paper:first-line {
+    font: 20pt Arial, sans-serif;
+}
+.paper:after {    
+    content: '';
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    position: absolute;
+    top: 150px;
+    left: 35px;
+    z-index: 10;
+    background: whitesmoke;
+    -webkit-box-shadow: 
+        inset 2px 2px 5px rgba(125,125,125,1),  
+        2px 302px 5px whitesmoke, 0px 300px rgba(125,125,125,1),  
+        2px 602px 5px whitesmoke, 0px 600px rgba(125,125,125,1),
+        2px 852px 5px whitesmoke, 0px 850px rgba(125,125,125,1);
+    -moz-box-shadow: 
+        inset 2px 2px 5px rgba(125,125,125,1),  
+        2px 302px 5px whitesmoke, 0px 300px rgba(125,125,125,1),  
+        2px 602px 5px whitesmoke, 0px 600px rgba(125,125,125,1),
+        2px 852px 5px whitesmoke, 0px 850px rgba(125,125,125,1);
+    box-shadow: 
+        inset 2px 1% 5px rgba(125,125,125,1),  
+        2px 302px 5px whitesmoke, 0px 300px rgba(125,125,125,1),  
+        2px 602px 5px whitesmoke, 0px 600px rgba(125,125,125,1),
+        2px 852px 5px whitesmoke, 0px 850px rgba(125,125,125,1);
+}

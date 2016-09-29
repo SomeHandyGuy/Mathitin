@@ -1,0 +1,84 @@
+html,body{
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    font-family: arial;
+    /*min-height: 955px;*/
+    top: 0;
+    margin: 0;
+    padding: 0;
+}
+
+div{
+    box-sizing: border-box;
+    margin: 0;
+}
+
+header{
+    height: 22.5%;
+    background-color: #5b70bc;
+    padding: 1%;
+}
+
+h1{
+    margin: 0;
+    font-family: Bank Gothic;
+    font-weight: normal;
+    text-transform: capitalize;
+    display: inline-block;
+    position: relative;
+    font-size: 6em;
+}
+
+p{
+    margin: 0;
+}
+
+
+header img{
+    height: 100%;
+}
+
+main{
+    height: 70.5%;
+    background-color: #8da3ff;
+}
+
+main div{
+    padding-top: 5%;
+    display: inline-block;
+    vertical-align: middle;
+    width: 60%;
+}
+
+main img{
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 10%;
+    padding-top: 5%;
+}
+
+main p{
+    font-size: 2em;
+    padding-bottom: 0.5em;
+}
+
+footer{
+    height: 5%;
+    background-color: #5b70bc;
+}
+
+footer p{
+    float: right;
+    padding-top: 0.6%;
+    padding-bottom: 0.6%;
+    padding-right: 2%;
+}
+
+@font-face{
+    font-family: Bank Gothic;
+    src: url("BankGothic Md BT Medium.ttf");
+}
+

@@ -1,0 +1,56 @@
+
+/* 
+    Created on : 18/01/2016, 2:25:01 PM
+    Author     : sda773
+*/
+
+.marking{
+    width: 1000px;
+    height: 800px;
+    background: rgb(255,255,255);
+    background: -moz-linear-gradient(top,  rgb(255,255,255) 0%, rgb(255,255,255) 92%, rgb(55,204,204) 94%, rgb(255,255,255) 96%, rgb(255,255,255) 100%);
+    background: -webkit-linear-gradient(top,  rgb(255,255,255) 0%,rgb(255,255,255) 92%,rgb(55,204,204) 94%,rgb(255,255,255) 96%,rgb(255,255,255) 100%);
+    background: linear-gradient(to bottom,  rgb(255,255,255) 0%,rgb(255,255,255) 92%,rgb(55,204,204) 94%,rgb(255,255,255) 96%,rgb(255,255,255) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=0 );
+    background-size: auto 2em;
+    background-repeat: repeat;
+}
+
+.markbox{
+    position: relative;
+    vertical-align: top;
+    min-height: 10em;
+    background: rgba(255,255,255,0.8);
+    font-family:Arial, Helvetica, sans-serif;
+    display: inline-block;
+    width: 45%;
+    border: black 5px solid;
+    border-radius: 10px;
+}
+
+.markbox legend{
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.markbox div[contenteditable='true']{
+    margin-bottom: 38px;
+}
+
+.markbox input[type='button']{
+    padding:6px 5px 6px 5px;
+    margin-right: 5px;
+    font-size:15px;
+    color:#ffffff;
+    background: lightslategray;
+    width:140px;
+    text-align:center;
+    border-radius:5px;
+}
+
+.markbox input[type='button']:hover{
+    background: slategray;
+}
+
+
+
