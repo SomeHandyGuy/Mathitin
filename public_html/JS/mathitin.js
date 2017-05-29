@@ -266,8 +266,11 @@ function getQuestion(event, id) {
         oldScrpt.parentNode.removeChild(oldScrpt);
     scrpt.src = 'QuestionBank/' + id + '.js';
     scrpt.id = 'qCode';
+    scrpt.onload = function () {
+        document.getElementById('loadingBar').style.display = 'none';
+    };
     document.body.appendChild(scrpt);
-}
+    document.getElementById('loadingBar').style.display = 'block';
 
 function setup(qid, array) {
     if (document.getElementById('showAnswerLabel'))
