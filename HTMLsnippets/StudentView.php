@@ -17,7 +17,7 @@
         <script src="JS/Graphit.js" type="text/javascript"></script>
         <script src="JS/statTable.js" type="text/javascript"></script>
         <script src="JS/mathitin.js" type="text/javascript"></script>
-        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
     </head>
     <body onload="AJAXrequest('POST', 'questionFetcher.php', buildMenu, 'method=resource&id=<?php echo $resource; ?>');">
         <div id='loadingBar' class="bar"><span></span></div>
