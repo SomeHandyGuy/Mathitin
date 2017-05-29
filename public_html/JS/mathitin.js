@@ -254,20 +254,19 @@ function getQuestion(event, id) {
     document.getElementById('hQuestionTitle').innerHTML = title;
     if (!id)
         id = this.dataset.id;
-    AJAXrequest('POST', 'questionFetcher.php', addCode, 'method=code&id=' + id);
     var tab = document.getElementById('tab-3')
     if (tab)
         tab.checked = true;
-    function addCode(code) {
-        var error = 'Question Fetch Error: question not found';
-        if (code == error)
-            console.log(error);
-        if (document.getElementById('plainQuestionText'))
-            document.getElementById('plainQuestionText').dataset.id = id;
-        makeVars = Function(code + ' setup(' + id + ',qNum);');
-        makeVars();
-    }
 
+    if (document.getElementById('plainQuestionText'))
+        document.getElementById('plainQuestionText').dataset.id = id;
+    var scrpt = document.createElement('script'),
+            oldScrpt = document.getElementById('qCode');
+    if (oldScrpt)
+        oldScrpt.parentNode.removeChild(oldScrpt);
+    scrpt.src = 'QuestionBank/' + id + '.js';
+    scrpt.id = 'qCode';
+    document.body.appendChild(scrpt);
 }
 
 function setup(qid, array) {
@@ -276,10 +275,11 @@ function setup(qid, array) {
     document.getElementById('showAnswerButton').checked = false;
     document.getElementById('newQuestionButton').checked = false;
     document.getElementById('stateWorkingArea').checked = true;
-    document.getElementById('stateFileBrowser').checked = false;
+    if (document.getElementById('stateFileBrowser'))
+        document.getElementById('stateFileBrowser').checked = false;
     if (document.getElementById('newQuestionLabel')) {
         document.getElementById('newQuestionLabel').style.visibility = 'visible';
-        document.getElementById('newQuestionLabel').addEventListener('click', makeVars, false);
+        document.getElementById('newQuestionLabel').addEventListener('click',window["makeVars"+qid], false);
     }
     
     var text = process('[?question]', array);
