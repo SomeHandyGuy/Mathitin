@@ -6,7 +6,8 @@
 
 function AJAXrequest(type, URL, action, send, requestHeader) {
     var loadingBar = document.getElementById('loadingBar');
-    loadingBar.style.display = 'block';
+    if (loadingBar)
+        loadingBar.style.display = 'block';
     var xhr = new XMLHttpRequest();
     xhr.open(type, URL);
     if (type = 'POST')
@@ -17,7 +18,8 @@ function AJAXrequest(type, URL, action, send, requestHeader) {
                 action(xhr.responseText);
 //            else
 //                console.log(xhr.responseText);
-            loadingBar.style.display = 'none';
+            if (loadingBar)
+                loadingBar.style.display = 'none';
         }
     }
     xhr.send(send);
