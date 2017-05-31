@@ -117,6 +117,7 @@ function getQuestion(event, id) {
     };
     document.body.appendChild(scrpt);
     document.getElementById('loadingBar').style.display = 'block';
+}
 
 function setup(qid, array) {
     if (document.getElementById('showAnswerLabel'))
