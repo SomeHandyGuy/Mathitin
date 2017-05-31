@@ -19,6 +19,7 @@
         <script src="JS/Graphit.js" type="text/javascript"></script>
         <script src="JS/statTable.js" type="text/javascript"></script>
         <script src="JS/mathitin.js" type="text/javascript"></script>
+        <script src="JS/mathitinInstructor.js" type="text/javascript"></script>
         <script src="JS/QuestionEditor.js" type="text/javascript"></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
     </head>
