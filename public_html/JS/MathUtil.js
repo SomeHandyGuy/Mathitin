@@ -3,21 +3,23 @@
  */
 
 function nonZeroRand(min, max) {
-    var num;
-    do {
-        num = Math.floor(Math.random() * (max - min + 1)) + min;
-    } while (num === 0);
-    return num;
+    return randomLowInt(min, max, 1, [0]);
 }
 
-function randomInt(min, max) {
-    return randomLowInt(min, max, 1);
+function randomInt(min, max, excludes) {
+    return randomLowInt(min, max, 1, excludes);
 }
 
-function randomLowInt(min, max, severity) {
+function randomLowInt(min, max, severity, excludes) {
     if (!severity)
         severity = 2;
-    return Math.floor(Math.pow(Math.random(), severity) * (max - min + 1) + min);
+    if (typeof excludes !== 'object')
+        excludes = [excludes];
+    var value;
+    do {
+        value = Math.floor(Math.pow(Math.random(), severity) * (max - min + 1) + min);
+    } while (excludes.indexOf(value) !== -1);
+    return value;
 }
 
 function randomDigitInt(limit) {// number of digits (1-10) is random and equally likely (eg 2-digit number has same prob as 10-digit number)
@@ -26,14 +28,34 @@ function randomDigitInt(limit) {// number of digits (1-10) is random and equally
     return Math.floor(Math.pow(Math.pow(10, limit), Math.random()));
 }
 
-function randomOp() {
-    var op = Math.floor(Math.random() * 4);
-    var sign = ['+', '-', 'xx', '-:'];
-    return sign[op];
+function randomFraction(min, max, denominatorMin, denominatorMax) {
+    if (!denominatorMin)
+        denominatorMin = 2;
+    var seed = Math.random();
+    var den = (denominatorMax) ? Math.floor(Math.random() * (denominatorMax - denominatorMin + 1)) : Math.round(1 / (seed * seed) + denominatorMin - 1);
+    var num = Math.floor(Math.random() * (max * den - min * den + 1) + max * den);
+    return new Fraction(num, den);
+}
+
+function randomOp(useLaTeX) {
+    if (useLaTeX)
+        return randomArrayElement(['+', '-', '\\times', '\\div']);
+    else
+        return randomArrayElement(['+', '-', 'xx', '-:']);
 }
 
 function randomArrayElement(array) {
     return array[randomInt(0, array.length - 1)];
+}
+
+function shuffle(arr) { //NOTE: destroys original array!
+    var shuffle = [], count = arr.length;
+    for (var i = 0; i < count; i++) {
+        var p = randomInt(0, arr.length - 1);
+        shuffle.push(arr[p]);
+        arr.splice(p, 1);
+    }
+    return shuffle;
 }
 
 function gcd(a, b)
@@ -44,8 +66,20 @@ function gcd(a, b)
         return gcd(b, a % b);
 }
 
+function primeFactorise(n) {//n must be less than 10000
+    var primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97],
+            factors = [], working = n;
+    for (var i = 0; i < primes.length && primes[i] < n * n; i++) {
+        while (working % primes[i] === 0) {
+            factors.push(primes[i]);
+            working /= primes[i];
+        }
+    }
+    return factors;
+}
+
 function factorial(n) {
-    return (n == 0) ? 1 : n * factorial(n - 1);
+    return (n === 0) ? 1 : n * factorial(n - 1);
 }
 
 function permutation(n, k) {
