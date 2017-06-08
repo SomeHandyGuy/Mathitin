@@ -129,7 +129,7 @@ function setup(qid, array) {
         document.getElementById('stateFileBrowser').checked = false;
     if (document.getElementById('newQuestionLabel')) {
         document.getElementById('newQuestionLabel').style.visibility = 'visible';
-        document.getElementById('newQuestionLabel').addEventListener('click',window["makeVars"+qid], false);
+        document.getElementById('newQuestionLabel').onclick= window["makeVars" + id];
     }
     
     var text = process('[?question]', array);
