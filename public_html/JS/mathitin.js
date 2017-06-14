@@ -115,7 +115,7 @@ function getQuestion(event, id) {
     scrpt.onload = function () {
         document.getElementById('loadingBar').style.display = 'none';
     };
-    document.body.appendChild(scrpt);
+    document.head.appendChild(scrpt);
     document.getElementById('loadingBar').style.display = 'block';
 }
 
